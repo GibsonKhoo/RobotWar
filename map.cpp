@@ -137,25 +137,24 @@ class Robot : public Map
 Robot :: Robot(const string& filename) : Map (filename) // constructor
 {
   fstream infile; 
-      infile.open(filename); 
-      while (getline (infile,line))
-      {
-        if (line.find("robots") != string :: npos)
-        {
-          int robot_start = line.find(":") + 1;
-          int robot_num = stoi (line.substr(robot_start)); // get the robot number
+  infile.open(filename); 
+  while (getline (infile,line))
+  {
+    if (line.find("robots") != string :: npos)
+    {
+      int robot_start = line.find(":") + 1;
+      int robot_num = stoi (line.substr(robot_start)); // get the robot number
 
-          cout << "Robot number: " << robot_num << endl;
-          setPos_array(robot_num); // update the robot number// size
-        }
-      }
-
-      infile.close(); // close the file 
-
-      robotPosX = new int [size]();
-      robotPosY = new int [size]();
-
+      cout << "Robot number: " << robot_num << endl;
+      setPos_array(robot_num); // update the robot number// size
     }
+  }
+
+  infile.close(); // close the file 
+
+  robotPosX = new int [size]();
+  robotPosY = new int [size]();
+}
 
 Robot :: ~Robot () // destructor
 {
@@ -212,7 +211,7 @@ void Robot :: display_robotPos() // display the robot position in the map
 int main()
 {
   string filename = "game.txt"; // file name
-  Map map(filename); 
+  Map map(filename);    
   Robot robot(filename); // create a robot object
   
   robot.create_map();
