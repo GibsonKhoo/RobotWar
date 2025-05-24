@@ -2,6 +2,8 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctime>
+
 
 using namespace std;
 
@@ -107,7 +109,7 @@ void Map :: display_map() const // display the map
 
 class Robot : public Map
 {
-  private:
+  protected:
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
 
@@ -131,68 +133,6 @@ class Robot : public Map
 
     void display_robotPos ();// display the robot position in the map
 };
-
-class Shooting : public Robot
-{
-    private:
-        int shells;
-
-    public:
-        Shooting(const string& filename, int initialShells = 10)
-        : Robot(filename), shells(initialShells)
-        {
-            srand(time(0)); // Seed random once
-        }
-
-        bool fire(int robotIndex, int dx, int dy)
-        {
-            if (shells <= 0)
-                {
-                    cout << "Robot " << char('A' + robotIndex) << " has no shells left and self-destructs!" << endl;
-            table[robotPosX[robotIndex]][robotPosY[robotIndex]] = 'X'; // mark self-destruct
-            return false;
-        }
-
-        if (dx == 0 && dy == 0)
-        {
-            cout << "Robot " << char('A' + robotIndex) << " tried to fire at itself! Not allowed." << endl;
-            return false;
-        }
-
-        int targetX = robotPosX[robotIndex] + dx;
-        int targetY = robotPosY[robotIndex] + dy;
-
-        if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols)
-            {
-                cout << "Target out of bounds. Fire action aborted." << endl;
-        return false;
-        }
-
-        shells--;
-
-        int hitChance = rand() % 100;
-        if (hitChance < 70)
-            {
-                cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits!" << endl;
-        if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
-            {
-                table[targetX][targetY] = 'X'; // Mark destroyed robot
-            }
-            return true;
-            }
-        else
-        {
-            cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and misses." << endl;
-            return false;
-        }
-    }
-
-    int getShells() const
-    {
-        return shells;
-    }
-};
-
 
 Robot :: Robot(const string& filename) : Map (filename) // constructor
 {
@@ -266,17 +206,78 @@ void Robot :: display_robotPos() // display the robot position in the map
       }
 }
 
+class Shooting : public Robot
+{
+    private:
+        int shells;
+
+    public:
+        Shooting(const string& filename, int initialShells = 10)
+        : Robot(filename), shells(initialShells)
+        {
+            srand(time(0)); // Seed random once
+        }
+
+        bool fire(char robotName, int currentX, int currentY, int dx, int dy)
+        {
+            if (shells <= 0)
+                {
+                    cout << "Robot " << robotName << " has no shells left and self-destructs!" << endl;
+            table[currentX][currentY] = 'X'; // mark self-destruct
+            return false;
+        }
+
+        if (dx == 0 && dy == 0)
+        {
+            cout << "Robot " << robotName << " tried to fire at itself! Not allowed." << endl;
+            return false;
+        }
+
+        int targetX = currentX + dx;
+        int targetY = currentY + dy;
+
+        if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols)
+            {
+                cout << "Target out of bounds. Fire action aborted." << endl;
+        return false;
+        }
+
+        shells--;
+
+        int hitChance = rand() % 100;
+        if (hitChance < 70)
+            {
+                cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and hits!" << endl;
+        if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
+            {
+                table[targetX][targetY] = 'X'; // Mark destroyed robot
+            }
+            return true;
+            }
+        else
+        {
+            cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and misses." << endl;
+            return false;
+        }
+    }
+        int getShells() const
+    {
+        return shells;
+    }
+};
+
 
 
 int main()
 {
   string filename = "game.txt"; // file name
   Map map(filename);
-  Robot robot(filename); // create a robot object
+  Shooting robot(filename); // create a robot object
 
   robot.create_map();
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
+  robot.fire('A', 2, 3, 1, 0);
   robot.display_map(); // display the map
 
 
