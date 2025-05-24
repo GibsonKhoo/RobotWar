@@ -109,7 +109,7 @@ void Map :: display_map() const // display the map
 
 class Robot : public Map
 {
-  private:  
+  protected:  
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
 
@@ -132,8 +132,6 @@ class Robot : public Map
     void get_robotPos(const string& filename);
 
     void display_robotPos ();// display the robot position in the map
-
-    void look_robotPos(int robotIndex, int offsetX, int offsetY); //look around
   };
 
 Robot :: Robot(const string& filename) : Map (filename) // constructor
@@ -208,59 +206,71 @@ void Robot :: display_robotPos() // display the robot position in the map
       }
 }
 
-void Robot :: look_robotPos(int robotIndex, int offsetX, int offsetY) //look around the robot position
+//class LookingRobot : public Robot
+//{
+//public:
+//  virtual void look(int robotIndex, int robotposX, int robotposY) = 0;
+//  virtual ~LookingRobot() {}
+//};
+
+class Looking : public Robot
 {
-  if (robotIndex >= size) //check if the robot exist
+public:
+  Looking(const string& filename) : Robot(filename) {}
+
+  void look(int robotIndex, int offsetX, int offsetY)
   {
-    cout << "Invalid robot index." << endl;
-    return;
-  }
-
-  if (offsetX < -1 || offsetX > 1 || offsetY < -1 || offsetY > 1) //to make sure robot is only looking one step around it
-  {
-    cout << "Error: you can only look at 8 neighbouring location or your own location." << endl;
-  }
-
-  int centreX = robotPosX[robotIndex] + offsetX;
-  int centreY = robotPosY[robotIndex] + offsetY;
-
-  cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
-
-  for (int dx = -1; dx <= 1; dx++) //left to right
-  {
-    for (int dy = -1; dy <= 1; dy++) //top to bottom
+    if (robotIndex >= size) //check if the robot exist
     {
-      int newX = centreX + dx;
-      int newY = centreY + dy;
+      cout << "Invalid robot index." << endl;
+      return;
+    }
 
-      if (newX >= 0 && newX < rows && newY >= 0 && newY < cols) //to check if robot is in battlefield range
-      {
-        char cell = table[newX][newY];
+    if (offsetX < -1 || offsetX > 1 || offsetY < -1 || offsetY > 1) //to make sure robot is only looking one step around it
+    {
+      cout << "Error: you can only look at 8 neighbouring location or your own location." << endl;
+    }
+
+    int centreX = robotPosX[robotIndex] + offsetX;
+    int centreY = robotPosY[robotIndex] + offsetY;
+
+    cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
+
+    for (int dx = -1; dx <= 1; dx++) //left to right
+    {
+      for (int dy = -1; dy <= 1; dy++) //top to bottom
+     {
+       int newX = centreX + dx;
+       int newY = centreY + dy;
+
+        if (newX >= 0 && newX < rows && newY >= 0 && newY < cols) //to check if robot is in battlefield range
+        {
+          char cell = table[newX][newY];
         
-        if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex])
-        {
-          cout << "Own self is at (" << newX << ", " << newY << ")." << endl;
-        }
+          if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex])
+          {
+           cout << "Own self is at (" << newX << ", " << newY << ")." << endl;
+          }
 
-        else if (cell >= 'A' && cell <= 'Z')
-        {
-          cout << "Enemy is at (" << newX << ", " << newY << ")" << endl;
+          else if (cell >= 'A' && cell <= 'Z')
+          {
+            cout << "Enemy is at (" << newX << ", " << newY << ")" << endl;
+          }
+
+          else
+          {
+           cout << "(" << newX << ", " << newY << ") is empty." << endl;
+          }
         }
 
         else
         {
-          cout << "(" << newX << ", " << newY << ") is empty." << endl;
+         cout << "Out of battlefield at (" << newX << ", " << newY << ")" << endl;
         }
-      }
-
-      else
-      {
-        cout << "Out of battlefield at (" << newX << ", " << newY << ")" << endl;
       }
     }
   }
-
-}
+};
 
 int main()
 {
@@ -272,7 +282,8 @@ int main()
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
   robot.display_map(); // display the map
-  robot.look_robotPos(0, 0, 0); //robot look around
+  
+  //robot.look(0, 0, 0); //robot look around
 
 
 
