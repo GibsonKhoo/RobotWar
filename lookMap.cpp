@@ -213,7 +213,7 @@ void Robot :: display_robotPos() // display the robot position in the map
 //  virtual ~LookingRobot() {}
 //};
 
-class Looking : public Robot
+class Looking : public Robot //class for look function
 {
 public:
   Looking(const string& filename) : Robot(filename) {}
