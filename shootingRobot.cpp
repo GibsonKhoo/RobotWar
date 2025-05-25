@@ -109,7 +109,7 @@ void Map :: display_map() const // display the map
 
 class Robot : public Map
 {
-  protected:
+  private:
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
 
