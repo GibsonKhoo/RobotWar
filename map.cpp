@@ -104,14 +104,12 @@ void Map :: display_map() const // display the map
   }
 }
 
-
-
-
 class Robot : public Map
 {
   private:  
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
+    char* robotinitials; // robot initials
 
     int size = 0; //will be updated to 5
     int currentIndex = 0;
@@ -154,12 +152,14 @@ Robot :: Robot(const string& filename) : Map (filename) // constructor
 
   robotPosX = new int [size]();
   robotPosY = new int [size]();
+  robotinitials = new char[size](); // initials array
 }
 
 Robot :: ~Robot () // destructor
 {
   delete [] robotPosX; // deallocate the memory
   delete [] robotPosY; // deallocate the memory 
+  delete [] robotinitials; // deallocate the memory
 }
 
 void Robot ::get_robotPos(const string& filename) // get the robot position
@@ -170,6 +170,14 @@ void Robot ::get_robotPos(const string& filename) // get the robot position
   {
     if (line.find("GenericRobot") != string::npos) 
     {
+      size_t name_pos = line.find("Name:");
+      char initial = '?';
+      if(name_pos != string::npos){
+        size_t name_start = name_pos + 5; // Move past "Name;"
+        while (line[name_start] == ' ' || line[name_start] == ':') name_start++;
+        initial = line[name_start];
+      }
+
       if (line.find("Pos") != string::npos) // check if the line contain the robot position
       {
         int x_start = line.find("(") + 1; 
@@ -182,31 +190,26 @@ void Robot ::get_robotPos(const string& filename) // get the robot position
         {  
           robotPosX[currentIndex] = x; 
           robotPosY[currentIndex] = y; 
+          robotinitials[currentIndex] = initial; 
           currentIndex++; 
         }
       }
-
       else // random 
       {
-        cout << "Error: Robot position not found" << endl;
+        cerr << "Error: Robot position not found" << endl;
       }
     }
   }
   infile.close();
-
-
 }
 
 void Robot :: display_robotPos() // display the robot position in the map
 {
-      for (int i = 0; i < size; i++)
-      { 
-        char robot_name = 'A'+ i; // assign the robot position to 'R'
-        table[robotPosX[i]][robotPosY[i]] = robot_name; // assign the robot position to 'R'
-      }
+  for (int i = 0; i < size; i++)
+  { 
+    table[robotPosX[i]][robotPosY[i]] = robotinitials[i]; // use the robot's initial
+  }
 }
-
-
 
 int main()
 {
@@ -217,6 +220,8 @@ int main()
   robot.create_map();
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
+  
+  
   robot.display_map(); // display the map
 
 
