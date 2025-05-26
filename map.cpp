@@ -132,6 +132,11 @@ class Robot : public Map
     void get_robotPos(const string& filename);
 
     void display_robotPos ();// display the robot position in the map
+
+    virtual void MovingRobot() = 0; 
+    virtual void ShootingRobot() = 0; 
+    virtual void ThinkingRobot() = 0; 
+    virtual void SeeingRobot() = 0; 
 };
 
 Robot :: Robot(const string& filename) : Map (filename) // constructor
@@ -206,18 +211,32 @@ void Robot :: display_robotPos() // display the robot position in the map
       }
 }
 
+class LookingRobot : public Robot 
+{
+  public:
+    LookingRobot(const string& filename) : Robot(filename) {} // constructor
 
+    void MovingRobot() override {}
+
+    void ShootingRobot() override {}
+
+    void ThinkingRobot() override {}
+
+    void SeeingRobot() override {
+      cout << "Seeing Robot" << endl;
+    }
+};
 
 int main()
 {
   string filename = "game.txt"; // file name
   Map map(filename);    
-  Robot robot(filename); // create a robot object
+  Robot * robot = new LookingRobot(filename); // create a robot object
   
-  robot.create_map();
-  robot.get_robotPos(filename); // get the robot position
-  robot.display_robotPos();
-  robot.display_map(); // display the map
+  robot->create_map();
+  robot->get_robotPos(filename); // get the robot position
+  robot->display_robotPos();
+  robot->display_map(); // display the map
 
 
 
