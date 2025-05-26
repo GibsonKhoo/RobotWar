@@ -106,7 +106,7 @@ void Map :: display_map() const // display the map
 
 class Robot : public Map
 {
-  private:  
+  protected:  
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
     char* robotinitials; // robot initials
@@ -211,6 +211,88 @@ void Robot :: display_robotPos() // display the robot position in the map
   }
 }
 
+class MovingRobot : public Robot {
+private:
+    int steps;
+
+    enum Direction { UP, DOWN, LEFT, RIGHT };
+
+    bool isValidMove(int x, int y) {
+        return x > 0 && x < getRows() - 1 && y > 0 && y < getCols() - 1;
+    }
+
+public:
+    MovingRobot(const string& filename) : Robot(filename) {
+        ifstream infile(filename);
+        string line;
+        steps = 0;
+        while (getline(infile, line)) {
+            if (line.find("steps") != string::npos) {
+                int s_start = line.find(":") + 1;
+                steps = stoi(line.substr(s_start));
+                break;
+            }
+        }
+        infile.close();
+        srand((unsigned)time(0)); // Seed the random number generator
+    }
+
+    void moveRobots() {
+        create_map();
+        get_robotPos("game.txt");
+
+        for (int step = 0; step < steps; ++step) {
+            cout << "Step: " << step + 1 << "/" << steps << endl;
+
+            // move robot in sequence from game.txt
+            int RobotMove = step % getPos_array();
+
+            cout << "Moving robot '" << robotinitials[RobotMove] << "'..." << endl;
+
+            // Remove from current position
+            table[robotPosX[RobotMove]][robotPosY[RobotMove]] = '.';
+
+            int dir = rand() % 4; // Randomly choose a direction
+
+            // get new pos
+            int newX = robotPosX[RobotMove];
+            int newY = robotPosY[RobotMove];
+            switch (dir) {
+                case UP:    newX -= 1; break;
+                case DOWN:  newX += 1; break;
+                case LEFT:  newY -= 1; break;
+                case RIGHT: newY += 1; break;
+            }
+
+            if (isValidMove(newX, newY)) {
+                cout << "Robot '" << robotinitials[RobotMove] << "' moves from (" 
+                     << robotPosX[RobotMove] << "," << robotPosY[RobotMove] << ") to (" 
+                     << newX << "," << newY << ")" << endl;
+                robotPosX[RobotMove] = newX;
+                robotPosY[RobotMove] = newY;
+            } else {
+                cout << "Robot '" << robotinitials[RobotMove] << "' stays at (" 
+                     << robotPosX[RobotMove] << "," << robotPosY[RobotMove] << ")" << endl;
+            }
+
+            // display all robots
+            for (int i = 0; i < getPos_array(); ++i) {
+                table[robotPosX[i]][robotPosY[i]] = robotinitials[i];
+            }
+            display_map();
+            cout << endl;
+        }
+    }
+
+protected:
+    using Robot::robotPosX;
+    using Robot::robotPosY;
+    using Robot::robotinitials;
+    using Map::table;
+    using Map::rows;
+    using Map::cols;
+};
+
 int main()
 {
   string filename = "game.txt"; // file name
@@ -223,10 +305,7 @@ int main()
   
   
   robot.display_map(); // display the map
-
-
-
-
-
-  return 0; 
+    MovingRobot movingRobot(filename);
+    movingRobot.moveRobots();
+    return 0;
 }
