@@ -258,7 +258,11 @@ public:
   virtual void look(int robotIndex, int offsetX, int offsetY) = 0; // pure virtual function for looking around
 };
 
-
+class ScoutRobot // class for scout funtion
+{
+public:
+  virtual void scout(int robotIndex, int offsetX, int offsetY) = 0; // pure virtual function for scout function
+};
 
 
 class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, public ThinkingRobot, public LookingRobot // multiple inheritance  
@@ -327,6 +331,43 @@ public:
         else
         {
          cout << "Out of battlefield at (" << newX << ", " << newY << ")" << endl;
+        }
+      }
+    }
+  }
+};
+
+class ScoutRobot : public Robot
+{
+private:
+  int remainingScout;
+
+public:
+  ScoutRobot(const string& filename) : Robot(filename), remainingScout(3) {}
+
+  void look(int robotIndex, int offsetX, int offsetY) override
+  {
+    if (remainingScout <= 0)
+    {
+      cout << "No scouts left." << endl;
+      return;
+    }
+
+    else
+    {
+      cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
+      remainingScout--;
+
+      for (int i = 0; i < getRows(); i++)
+      {
+        for (int j = 0; j < getCols(); j++)
+        {
+          char cell = table[i][j];
+
+          if (cell >= 'A' && cell <= 'Z')
+          {
+            cout << "Enemy is at (" << i << ", " << j << ")" << endl;
+          }
         }
       }
     }
