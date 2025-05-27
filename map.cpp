@@ -376,6 +376,111 @@ public:
       }
     }
   }
+public:
+  Robot(const string& filename); // constructor
+
+  void shoot() override 
+  {
+    cout << "Robot shoots!" << endl; 
+  }
+  void move() override 
+  {
+    cout << "Robot moves!" << endl; 
+  }
+  void think() override 
+  {
+    cout << "Robot is thinking!" << endl; 
+  } 
+
+  void look(int robotIndex, int offsetX, int offsetY) override
+  {
+    if (robotIndex >= size) //check if the robot exist
+    {
+      cout << "Invalid robot index." << endl;
+      return;
+    }
+
+    if (offsetX < -1 || offsetX > 1 || offsetY < -1 || offsetY > 1) //to make sure robot is only looking one step around it
+    {
+      cout << "Error: you can only look at 8 neighbouring location or your own location." << endl;
+    }
+
+    int centreX = robotPosX[robotIndex] + offsetX;
+    int centreY = robotPosY[robotIndex] + offsetY;
+
+    cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
+
+    for (int dx = -1; dx <= 1; dx++) //left to right
+    {
+      for (int dy = -1; dy <= 1; dy++) //top to bottom
+     {
+       int newX = centreX + dx;
+       int newY = centreY + dy;
+
+        if (newX >= 0 && newX < rows && newY >= 0 && newY < cols) //to check if robot is in battlefield range
+        {
+          char cell = table[newX][newY];
+        
+          if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex])
+          {
+           cout << "Own self is at (" << newX << ", " << newY << ")." << endl;
+          }
+
+          else if (cell >= 'A' && cell <= 'Z') //robot found
+          {
+            cout << "Enemy is at (" << newX << ", " << newY << ")" << endl;
+          }
+
+          else
+          {
+           cout << "(" << newX << ", " << newY << ") is empty." << endl;
+          }
+        }
+
+        else
+        {
+         cout << "Out of battlefield at (" << newX << ", " << newY << ")" << endl;
+        }
+      }
+    }
+  }
+};
+
+class ScoutRobot : public Robot
+{
+private:
+  int remainingScout;
+
+public:
+  ScoutRobot(const string& filename) : Robot(filename), remainingScout(3) {}
+
+  void look(int robotIndex, int offsetX, int offsetY) override
+  {
+    if (remainingScout <= 0)
+    {
+      cout << "No scouts left." << endl;
+      return;
+    }
+
+    else
+    {
+      cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
+      remainingScout--;
+
+      for (int i = 0; i < getRows(); i++)
+      {
+        for (int j = 0; j < getCols(); j++)
+        {
+          char cell = table[i][j];
+
+          if (cell >= 'A' && cell <= 'Z')
+          {
+            cout << "Enemy is at (" << i << ", " << j << ")" << endl;
+          }
+        }
+      }
+    }
+  }
 };
 
 Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
