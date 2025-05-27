@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <ctime>
 
 using namespace std; 
 
@@ -130,6 +131,11 @@ class Robot : public Map
     void get_robotPos(const string& filename);
 
     void display_robotPos ();// display the robot position in the map
+
+    virtual void moveRobotsOverride() = 0; 
+    virtual void ShootingRobot() = 0; 
+    virtual void ThinkingRobot() = 0; 
+    virtual void SeeingRobot() = 0; 
 };
 
 Robot :: Robot(const string& filename) : Map (filename) // constructor
@@ -291,20 +297,53 @@ protected:
     using Map::table;
     using Map::rows;
     using Map::cols;
+
+    // Implement pure virtual functions from Robot
+public:
+    void moveRobotsOverride() override {
+        // Provide a minimal implementation or call moveRobots if desired
+        moveRobots();
+    }
+    void ShootingRobot() override {
+        // No shooting logic for MovingRobot
+    }
+    void ThinkingRobot() override {
+        // No thinking logic for MovingRobot
+    }
+    void SeeingRobot() override {
+        // No seeing logic for MovingRobot
+    }
+
+};
+
+class LookingRobot : public Robot 
+{
+  public:
+    LookingRobot(const string& filename) : Robot(filename) {} // constructor
+
+    void moveRobotsOverride() override {}
+
+    void ShootingRobot() override {}
+
+    void ThinkingRobot() override {}
+
+    void SeeingRobot() override {
+      cout << "Seeing Robot" << endl;
+    }
 };
 
 int main()
 {
   string filename = "game.txt"; // file name
   Map map(filename);    
-  Robot robot(filename); // create a robot object
+  Robot * robot = new LookingRobot(filename); // create a robot object
   
-  robot.create_map();
-  robot.get_robotPos(filename); // get the robot position
-  robot.display_robotPos();
+  robot->create_map();
+  robot->get_robotPos(filename); // get the robot position
+  robot->display_robotPos();
   
   
-  robot.display_map(); // display the map
+  robot->display_map(); // display the map
     MovingRobot movingRobot(filename);
     movingRobot.moveRobots();
     return 0;

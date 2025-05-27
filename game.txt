@@ -3,7 +3,7 @@ steps: 10
 robots: 5
 GenericRobot1 Name: Kidd , Pos : (3,6)
 GenericRobot2 Name: Jett , Pos : (5,1)
-GenericRobot3 Name: Alpha , Pos : (1,8)
+GenericRobot3 Name: Alpha , Pos : (2,7)
 GenericRobot4 Name: Beta , Pos : (3,16)
 GenericRobot5 Name: Star , Pos : (2,10)
 
