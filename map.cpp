@@ -1,7 +1,6 @@
 #include <iostream> 
 #include <fstream>
 #include <string>
-#include <sstream>
 
 using namespace std; 
 
@@ -60,6 +59,7 @@ Map ::Map(const string& filename) // get the map size // constructor
 
 Map :: ~Map () // destructor
 {
+  cout << "Destroying map..." << endl;
   destroy_map(); // deallocate the memory
 }
 
@@ -107,14 +107,16 @@ void Map :: display_map() const // display the map
 
 
 
-class Robot : public Map
+class GenericRobot : public Map // initial class for robot
 {
-  private:  
+  protected:  
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
 
     int size = 0; //will be updated to 5
     int currentIndex = 0;
+
+    int steps = 0; //will be updated to 300
 
   public:
     void setPos_array (int s) {
@@ -125,21 +127,22 @@ class Robot : public Map
       return size; 
     }
 
-    Robot(const string& filename); // constructor
+    GenericRobot(const string& filename); // constructor header 
   
-    virtual ~Robot (); // destructor
+    virtual ~GenericRobot (); // destructor header
     
     void get_robotPos(const string& filename);
 
-    void display_robotPos ();// display the robot position in the map
+    void display_robotPos();// display the robot position in the map
 
-    virtual void MovingRobot() = 0; 
-    virtual void ShootingRobot() = 0; 
-    virtual void ThinkingRobot() = 0; 
-    virtual void SeeingRobot() = 0; 
-};
+    void set_steps(const string& filename);
 
-Robot :: Robot(const string& filename) : Map (filename) // constructor
+    int get_steps() const {
+      return steps; // return the steps number
+    }
+  };
+
+GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
 {
   fstream infile; 
   infile.open(filename); 
@@ -150,7 +153,7 @@ Robot :: Robot(const string& filename) : Map (filename) // constructor
       int robot_start = line.find(":") + 1;
       int robot_num = stoi (line.substr(robot_start)); // get the robot number
 
-      cout << "Robot number: " << robot_num << endl;
+      //cout << "Robot number: " << robot_num << endl;
       setPos_array(robot_num); // update the robot number// size
     }
   }
@@ -161,13 +164,13 @@ Robot :: Robot(const string& filename) : Map (filename) // constructor
   robotPosY = new int [size]();
 }
 
-Robot :: ~Robot () // destructor
+GenericRobot :: ~GenericRobot () // destructor
 {
   delete [] robotPosX; // deallocate the memory
   delete [] robotPosY; // deallocate the memory 
 }
 
-void Robot ::get_robotPos(const string& filename) // get the robot position
+void GenericRobot ::get_robotPos(const string& filename) // get the robot position
 {
   fstream infile; 
   infile.open(filename); 
@@ -202,7 +205,7 @@ void Robot ::get_robotPos(const string& filename) // get the robot position
 
 }
 
-void Robot :: display_robotPos() // display the robot position in the map
+void GenericRobot :: display_robotPos() // display the robot position in the map
 {
       for (int i = 0; i < size; i++)
       { 
@@ -211,36 +214,210 @@ void Robot :: display_robotPos() // display the robot position in the map
       }
 }
 
-class LookingRobot : public Robot 
+void GenericRobot :: set_steps(const string& filename) // get the steps
 {
-  public:
-    LookingRobot(const string& filename) : Robot(filename) {} // constructor
+  fstream infile; 
+  infile.open(filename); 
+  while (getline (infile,line))
+  {
+    if (line.find("steps:") != string::npos) // check if the line contain the steps
+    {
+      int steps_start = line.find(":") + 1; 
+      int steps_num = stoi(line.substr(steps_start)); // get the steps number
+      steps = steps_num; // update the steps number
+      
+    } 
+  }
+  infile.close(); // close the file 
+}
 
-    void MovingRobot() override {}
 
-    void ShootingRobot() override {}
 
-    void ThinkingRobot() override {}
 
-    void SeeingRobot() override {
-      cout << "Seeing Robot" << endl;
-    }
+class ShootingRobot // class for shoot function
+{
+public:
+  virtual void shoot() = 0; // pure virtual function for shooting
 };
+
+class MovingRobot // class for move function
+{
+public:
+  virtual void move() = 0; // pure virtual function for moving
+};
+
+class ThinkingRobot // class for think function
+{
+public:
+  virtual void think() = 0; // pure virtual function for thinking
+};
+
+class LookingRobot // class for look function
+{
+public:
+  virtual void look(int robotIndex, int offsetX, int offsetY) = 0; // pure virtual function for looking around
+};
+
+class ScoutRobot // class for scout funtion
+{
+public:
+  virtual void scout(int robotIndex, int offsetX, int offsetY) = 0; // pure virtual function for scout function
+};
+
+
+class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, public ThinkingRobot, public LookingRobot // multiple inheritance  
+{
+public:
+  Robot(const string& filename); // constructor
+
+  void shoot() override 
+  {
+    cout << "Robot shoots!" << endl; 
+  }
+  void move() override 
+  {
+    cout << "Robot moves!" << endl; 
+  }
+  void think() override 
+  {
+    cout << "Robot is thinking!" << endl; 
+  } 
+
+  void look(int robotIndex, int offsetX, int offsetY) override
+  {
+    if (robotIndex >= size) //check if the robot exist
+    {
+      cout << "Invalid robot index." << endl;
+      return;
+    }
+
+    if (offsetX < -1 || offsetX > 1 || offsetY < -1 || offsetY > 1) //to make sure robot is only looking one step around it
+    {
+      cout << "Error: you can only look at 8 neighbouring location or your own location." << endl;
+    }
+
+    int centreX = robotPosX[robotIndex] + offsetX;
+    int centreY = robotPosY[robotIndex] + offsetY;
+
+    cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
+
+    for (int dx = -1; dx <= 1; dx++) //left to right
+    {
+      for (int dy = -1; dy <= 1; dy++) //top to bottom
+     {
+       int newX = centreX + dx;
+       int newY = centreY + dy;
+
+        if (newX >= 0 && newX < rows && newY >= 0 && newY < cols) //to check if robot is in battlefield range
+        {
+          char cell = table[newX][newY];
+        
+          if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex])
+          {
+           cout << "Own self is at (" << newX << ", " << newY << ")." << endl;
+          }
+
+          else if (cell >= 'A' && cell <= 'Z') //robot found
+          {
+            cout << "Enemy is at (" << newX << ", " << newY << ")" << endl;
+          }
+
+          else
+          {
+           cout << "(" << newX << ", " << newY << ") is empty." << endl;
+          }
+        }
+
+        else
+        {
+         cout << "Out of battlefield at (" << newX << ", " << newY << ")" << endl;
+        }
+      }
+    }
+  }
+};
+
+class ScoutRobot : public Robot
+{
+private:
+  int remainingScout;
+
+public:
+  ScoutRobot(const string& filename) : Robot(filename), remainingScout(3) {}
+
+  void look(int robotIndex, int offsetX, int offsetY) override
+  {
+    if (remainingScout <= 0)
+    {
+      cout << "No scouts left." << endl;
+      return;
+    }
+
+    else
+    {
+      cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
+      remainingScout--;
+
+      for (int i = 0; i < getRows(); i++)
+      {
+        for (int j = 0; j < getCols(); j++)
+        {
+          char cell = table[i][j];
+
+          if (cell >= 'A' && cell <= 'Z')
+          {
+            cout << "Enemy is at (" << i << ", " << j << ")" << endl;
+          }
+        }
+      }
+    }
+  }
+};
+
+Robot ::Robot(const string& filename) : GenericRobot(filename){} // constructor
+
 
 int main()
 {
   string filename = "game.txt"; // file name
-  Map map(filename);    
-  Robot * robot = new LookingRobot(filename); // create a robot object
+  Robot tempRobot(filename); // get the robot num from the generic robot class
+  int numRobots = tempRobot.getPos_array(); // get the robot size
+
+  tempRobot.set_steps(filename); // get the steps
+  int numSteps = tempRobot.get_steps(); // get the steps number
+  cout << "Number of Steps: " << numSteps << endl; // display the number of robots
+
+
+  Robot* robots [numRobots]; // create an array of robot pointers
+  for (int i = 0; i < numRobots; i++)
+  {
+    robots[i] = new Robot(filename); // create a robot object for each robot
+  }
+
+
+  //initialize the map for each robot
+  for (int i = 0; i < numRobots; i++)
+  {
+    robots[i]->create_map();
+    robots[i]->get_robotPos(filename); // get the robot position
+    robots[i]->display_robotPos();
+  }  
+    robots[0]->display_map(); // display the map for the first robot
+
+  for (int i = 0; i < numRobots; ++i) 
+  {
+    cout << "\n--- Robot " << char('A' + i) << " actions ---\n";
+    robots[i]->think();
+    robots[i]->move();
+    robots[i]->shoot();
+    robots[i]->look(i, 0, 0);
+  }
   
-  robot->create_map();
-  robot->get_robotPos(filename); // get the robot position
-  robot->display_robotPos();
-  robot->display_map(); // display the map
-
-
-
-
+  for (int i = 0; i < numRobots; ++i) 
+  {
+        delete robots[i];
+        robots[i]->destroy_map(); // deallocate the memory for each robot
+  }
 
   return 0; 
 }
