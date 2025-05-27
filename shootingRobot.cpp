@@ -222,6 +222,15 @@ class Shooting : public Robot
             srand(time(0)); // Seed random once
         }
 
+        int getRobotPosX(int i) const { return robotPosX[i]; }
+        int getRobotPosY(int i) const { return robotPosY[i]; }
+        char getRobotName(int i) const { return 'A' + i; }
+
+        bool isAlive(int i) const
+        {
+          return table[robotPosX[i]][robotPosY[i]] != 'X';
+        }
+
         bool fire(char robotName, int currentX, int currentY, int dx, int dy)
         {
             if (shells <= 0)
@@ -268,7 +277,46 @@ class Shooting : public Robot
         cout << "Bullets used: " << shellsUsed << ", Bullets left: " << shells << endl;
         return true;
     }
-        
+    
+    void autoFire()
+    {
+      int n = getPos_array();
+
+      for (int i = 0, i < n; ++i)
+      {
+        if (!isAlive(i)) continue;
+
+        int x1 = getRobotPosX(i);
+        int y1 = getRobotPosY(i);
+        char name1 = getRobotName(i);
+
+        int minDist = 1e9;
+        int targetDx = 0, targetDy = 0;
+
+        for (int j = 0; j < n; ++j)
+        {
+          if (i == j || !isAlive(j)) continue;
+
+          int x2 = getRobotPosX(j);
+          int y2 = getRobotPosY(j);
+
+          int dx = x2 - x1;
+          int dy = y2 - y1;
+          int dist = abs(dx) + abs(dy);
+
+          if (dist < minDist)
+          {
+            minDist = dist;
+            targetDx = (dx == 0 ? 0 : dx / abs(dx));
+            targetDy = (dy == 0 ? 0 : dy / abs(dy));
+          }
+        }
+
+        if (targetDx == 0 && targetDy == 0) continue;
+        fire(name1, x1, y1, targetDx, targetDy);
+      }
+    }
+
     int getShells() const
     {
         return shells;
@@ -286,7 +334,7 @@ int main()
   robot.create_map();
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
-  robot.fire('A', 2, 6, -1, 2);
+  robot.autoFire();
   robot.display_map(); // display the map
   cout << "Closing program..." << endl;
 
