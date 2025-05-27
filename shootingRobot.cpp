@@ -288,6 +288,7 @@ int main()
   robot.display_robotPos();
   robot.fire('A', 2, 6, -1, 2);
   robot.display_map(); // display the map
+  cout << "Closing program..." << endl;
 
 
 
