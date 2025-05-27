@@ -201,8 +201,11 @@ void Robot :: display_robotPos() // display the robot position in the map
 {
       for (int i = 0; i < size; i++)
       {
-        char robot_name = 'A'+ i; // assign the robot position to 'R'
-        table[robotPosX[i]][robotPosY[i]] = robot_name; // assign the robot position to 'R'
+        if (table[robotPosX[i]][robotPosY[i]] != 'X')
+        {
+          char robot_name = 'A'+ i; // assign the robot position to 'R'
+          table[robotPosX[i]][robotPosY[i]] = robot_name; // assign the robot position to 'R'
+        }
       }
 }
 
@@ -210,10 +213,11 @@ class Shooting : public Robot
 {
     private:
         int shells;
+        int shellsUsed = 0;
 
     public:
         Shooting(const string& filename, int initialShells = 10)
-        : Robot(filename), shells(initialShells)
+        : Robot(filename), shells(initialShells), shellsUsed(0)
         {
             srand(time(0)); // Seed random once
         }
@@ -243,24 +247,29 @@ class Shooting : public Robot
         }
 
         shells--;
+        shellsUsed++;
 
-        int hitChance = rand() % 100;
+        //int hitChance = rand() % 100;
+        int hitChance = 0;
+
         if (hitChance < 70)
-            {
+        {
                 cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and hits!" << endl;
-        if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
+            if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
             {
                 table[targetX][targetY] = 'X'; // Mark destroyed robot
             }
-            return true;
-            }
+        }
         else
         {
             cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and misses." << endl;
-            return false;
         }
+
+        cout << "Bullets used: " << shellsUsed << ", Bullets left: " << shells << endl;
+        return true;
     }
-        int getShells() const
+        
+    int getShells() const
     {
         return shells;
     }
@@ -277,10 +286,8 @@ int main()
   robot.create_map();
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
-  robot.fire('A', 2, 3, 1, 0);
+  robot.fire('A', 2, 6, -1, 2);
   robot.display_map(); // display the map
-
-
 
 
 
