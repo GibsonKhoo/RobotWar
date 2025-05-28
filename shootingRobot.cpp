@@ -183,6 +183,7 @@ void Robot ::get_robotPos(const string& filename) // get the robot position
         {
           robotPosX[currentIndex] = x;
           robotPosY[currentIndex] = y;
+          cout << "Robot " << char('A' + currentIndex) << " is at (" << x << "," << y << ")" << endl;
           currentIndex++;
         }
       }
@@ -207,35 +208,28 @@ void Robot :: display_robotPos() // display the robot position in the map
           char robot_name = 'A'+ i; // assign the robot position to 'R'
           table[robotPosX[i]][robotPosY[i]] = robot_name; // assign the robot position to 'R'
 
-          //testing
-          cout << "Placed Robot " << robot_name << " at (" << robotPosX[i] << "," << robotPosY[i] << ")" << endl;
         }
       }
 }
 
 class Shooting : public Robot
 {
-    private:
-        int shells;
-        int shellsUsed = 0;
+private:
+    int shells;
+    int shellsUsed = 0;
 
-    public:
-        Shooting(const string& filename, int initialShells = 10)
+public:
+    Shooting(const string& filename, int initialShells = 10)
         : Robot(filename), shells(initialShells), shellsUsed(0)
-        {
-            srand(time(0)); // Seed random once
-        }
+    {
+        srand(time(0)); // Seed random once
+    }
 
-        int getShells() const
+    bool fire(char robotName, int currentX, int currentY, int dx, int dy)
+    {
+        if (shells <= 0)
         {
-          return shells;
-        }
-
-        bool fire(char robotName, int currentX, int currentY, int dx, int dy)
-        {
-            if (shells <= 0)
-                {
-                    cout << "Robot " << robotName << " has no shells left and self-destructs!" << endl;
+            cout << "Robot " << robotName << " has no shells left and self-destructs!" << endl;
             table[currentX][currentY] = 'X'; // mark self-destruct
             return false;
         }
@@ -250,20 +244,19 @@ class Shooting : public Robot
         int targetY = currentY + dy;
 
         if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols)
-            {
-                cout << "Target out of bounds. Fire action aborted." << endl;
-        return false;
+        {
+            cout << "Target out of bounds. Fire action aborted." << endl;
+            return false;
         }
 
         shells--;
         shellsUsed++;
 
-        //int hitChance = rand() % 100;
-        int hitChance = 0;
+        int hitChance = 0; // guaranteed hit
 
         if (hitChance < 70)
         {
-                cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and hits!" << endl;
+            cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and hits!" << endl;
             if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
             {
                 table[targetX][targetY] = 'X'; // Mark destroyed robot
@@ -277,65 +270,93 @@ class Shooting : public Robot
         cout << "Bullets used: " << shellsUsed << ", Bullets left: " << shells << endl;
         return true;
     }
-    
-    void autoFireNearest(char robotName)
-    {
-      int myX = -1, myY = -1;
 
-      for (int i = 0; i < rows; ++i)
-      {
-        for (int j = 0; j < cols; ++j)
+    // Find coordinates of a robot by name (like 'A')
+    bool findRobotPosition(char robotName, int &x, int &y)
+    {
+        for (int i = 0; i < getRows(); i++)
         {
-          if (table[i][j] == robotName)
+            for (int j = 0; j < getCols(); j++)
+            {
+                if (table[i][j] == robotName)
+                {
+                    x = i;
+                    y = j;
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    void autoFireNearest()
+    {
+      int ax = -1, ay = -1;
+
+      for (int i = 0; i < rows; i++)
+      {
+        for (int j = 0; j < cols; j++)
+        {
+          if (table[i][j] == 'A')
           {
-            myX = i;
-            myY = j;
+            ax = i;
+            ay = j;
             break;
           }
         }
-        if (myX != -1)
-        break;
+        if (ax != -1) break;
+      }
 
-        if (myX == -1)
+      if (ax == -1 || ay == -1)
+      {
+        cout << "Robot A not found." << endl;
+        return;
+      }
+
+      int minDist = 1e9;
+      int tx = -1, ty = -1;
+
+      for (int i = 0; i < rows; i++)
+      {
+        for (int j = 0; j < cols; j++)
         {
-          cout << "Robot " << robotName << " not found on map" << endl;
-          return;
-        }
-
-        int nearestDist = 1e9;
-        int targetX = -1, targetY = -1;
-
-        for (int i = 0; i < rows; ++i)
-        {
-          for (int j = 0; j < cols; ++j)
+          char c = table[i][j];
+          if (c >= 'B' && c <= 'Z')
           {
-            char cell = table[i][j];
-            if (cell >= 'A' && cell <= 'Z' && cell != robotName)
+            int dist = abs(i - ax) + abs(j - ay);
+            if (dist < minDist)
             {
-              int dist = abs(i - myX) + abs(j - myY);
-              if (dist < nearestDist)
-              {
-                nearestDist = dist;
-                targetX = i;
-                targetY = j;
-              }
+              minDist = dist;
+              tx = i;
+              ty = j;
             }
           }
         }
+      }
 
-        if (targetX != -1)
-        {
-          int dx = targetX - myX;
-          int dy = targetY - myY;
-          fire(robotName, myX, myY, dx, dy);
-        }
-        else
-        {
-          cout << "No target found for robot " << robotName << "." << endl;
-        }
+      if (tx != -1 && ty != -1)
+      {
+        int dx = tx - ax;
+        int dy = ty - ay;
+
+        dx = (dx != 0) ? dx / abs(dx) : 0;
+        dy = (dy != 0) ? dy / abs(dy) : 0;
+
+        cout << "Nearest robot to A is at (" << tx << "," << ty << ")" << end;
+        fire('A', ax, ay, dx, dy);
+      }
+      else
+      {
+        cout << "No valid target found for Robot A" << endl;
       }
     }
+
+    int getShells() const
+    {
+        return shells;
+    }
 };
+
 
 
 
@@ -348,7 +369,7 @@ int main()
   robot.create_map();
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
-  robot.autoFireNearest('A');
+  robot.autoFireNearest();
   robot.display_map(); // display the map
 
 
