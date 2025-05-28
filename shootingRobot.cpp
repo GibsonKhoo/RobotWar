@@ -225,7 +225,7 @@ public:
         srand(time(0)); // Seed random once
     }
 
-    bool fire(char robotName, int currentX, int currentY, int dx, int dy)
+    bool fire(char robotName, int currentX, int currentY, int dx, int dy, char targetName)
     {
         if (shells <= 0)
         {
@@ -256,7 +256,7 @@ public:
 
         if (hitChance < 70)
         {
-            cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and hits!" << endl;
+            cout << "Robot " << robotName << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
             if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
             {
                 table[targetX][targetY] = 'X'; // Mark destroyed robot
@@ -292,7 +292,8 @@ public:
     void autoFireNearest()
     {
       int ax = -1, ay = -1;
-
+      
+      //to find Robot A
       for (int i = 0; i < rows; i++)
       {
         for (int j = 0; j < cols; j++)
@@ -313,53 +314,43 @@ public:
         return;
       }
 
-      int minDist = 1e9;
-      int tx = -1, ty = -1;
+      int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+      int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
-      for (int i = 0; i < rows; i++)
+      bool fired = false;
+
+      for (int d = 0; d < 8; d++)
       {
-        for (int j = 0; j < cols; j++)
+        int nx = ax + dx[d];
+        int ny = ay + dy[d];
+
+      if (nx >= 0 && nx < rows && ny >= 0 && ny < cols)
+      {
+        char target = table[nx][ny];
+
+        if (target >= 'B' && target <= 'Z')
         {
-          char c = table[i][j];
-          if (c >= 'B' && c <= 'Z')
-          {
-            int dist = abs(i - ax) + abs(j - ay);
-            if (dist < minDist)
-            {
-              minDist = dist;
-              tx = i;
-              ty = j;
-            }
-          }
+          cout << "Robot A detects robot " << target << " at (" << nx << "," << ny << ")" << endl;
+          fire('A', ax, ay, dx[d], dy[d], target);
+          fired = true;
+          break;
         }
       }
+      } 
+    
 
-      if (tx != -1 && ty != -1)
-      {
-        int dx = tx - ax;
-        int dy = ty - ay;
-
-        dx = (dx != 0) ? dx / abs(dx) : 0;
-        dy = (dy != 0) ? dy / abs(dy) : 0;
-
-        cout << "Nearest robot to A is at (" << tx << "," << ty << ")" << end;
-        fire('A', ax, ay, dx, dy);
-      }
-      else
-      {
-        cout << "No valid target found for Robot A" << endl;
-      }
+    if (!fired)
+    {
+      cout << "Robot A found no nearby targets to fire at." << endl;
     }
-
-    int getShells() const
+}
+int getShells() const
     {
         return shells;
     }
 };
 
-
-
-
+    
 int main()
 {
   string filename = "game.txt"; // file name
@@ -374,4 +365,4 @@ int main()
 
 
   return 0;
-}
+};
