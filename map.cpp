@@ -260,7 +260,13 @@ public:
   virtual void look(int robotIndex, int offsetX, int offsetY) = 0; // pure virtual function for looking around
 };
 
+class Upgrade // class for upgrade function
+{
+public: 
+  virtual void look(int robotIndex, int offsetX, int offsetY) = 0; 
 
+  virtual ~Upgrade() {} // virtual destructor for cleanup
+};
 
 
 class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, public ThinkingRobot, public LookingRobot // multiple inheritance  
@@ -385,6 +391,45 @@ Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
 } 
 
 
+class ScoutRobot : public Upgrade, public Robot // ScoutRobot inherits from Upgrade and Robot
+{
+private:
+  int remainingScout;
+
+public:
+  ScoutRobot(const string& filename) : Robot(filename), remainingScout(3) {}
+
+  void look(int robotIndex, int offsetX, int offsetY) override
+  {
+    if (remainingScout <= 0)
+    {
+      cout << "No scouts left." << endl;
+      return;
+    }
+
+    else
+    {
+      cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
+      remainingScout--;
+
+      for (int i = 0; i < getRows(); i++)
+      {
+        for (int j = 0; j < getCols(); j++)
+        {
+          char cell = table[i][j];
+
+          if (cell >= 'A' && cell <= 'Z')
+          {
+            cout << "Enemy is at (" << i << ", " << j << ")" << endl;
+          }
+        }
+      }
+    }
+  }
+};
+
+
+
 int main()
 {
   string filename = "game.txt"; // file name
@@ -399,15 +444,29 @@ int main()
   robot.set_steps(filename);
   int numSteps = robot.get_steps();
 
-  for (int step = 0; step < numSteps; ++step) {
-      int robotIndex = step % numRobots; // decide which robot to move
-      cout << "\n--- Step " << step+1 << ": Robot " << char('A' + robotIndex) << " moves ---\n";
-      
-      robot.think();
-      robot.shoot();
-      robot.look(robotIndex, 0, 0); 
-      robot.move(filename, robotIndex);
-      
+  bool gameStart = true;
+  int round = 1;
+  
+  while (gameStart && numSteps > 0) // game starts and steps are available
+  {
+    
+    cout << "Round " << round << endl;
+    for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) 
+    {
+        
+        robot.think();
+        robot.shoot();
+        robot.look(robotIndex, 0, 0); 
+        robot.move(filename, robotIndex); 
+    }
+
+    numSteps--; // decrease the steps after each robot move
+    round++; // increase the round after each robot move
+
+    if (numSteps <= 0) 
+    {
+      gameStart = false; // end the game
+    }
   }
 
   robot.destroy_map(); // deallocate the memory for the robot map
