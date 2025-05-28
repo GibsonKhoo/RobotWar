@@ -3,7 +3,6 @@
 #include <string>
 #include <ctime>
 
-
 using namespace std; 
 
 class Map 
@@ -359,6 +358,7 @@ public:
         {
           char cell = table[newX][newY];
         
+          // checking if the looking function is working correctly 
           if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex])
           {
            cout << "Own self is at (" << newX << ", " << newY << ")." << endl;
@@ -450,10 +450,9 @@ int main()
   while (gameStart && numSteps > 0) // game starts and steps are available
   {
     
-    cout << "Round " << round << endl;
+    cout << " ---------------- Round " << round  << " -----------------" << endl;
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) 
     {
-        
         robot.think();
         robot.shoot();
         robot.look(robotIndex, 0, 0); 
