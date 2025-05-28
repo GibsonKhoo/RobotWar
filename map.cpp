@@ -114,6 +114,7 @@ class GenericRobot : public Map // initial class for robot
   protected:  
     int * robotPosX; // robot position x
     int * robotPosY; // robot position y
+    char  * robotinitial; // robot initial as name
 
     int size = 0; //will be updated to 5
     int currentIndex = 0;
@@ -164,12 +165,14 @@ GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constru
 
   robotPosX = new int [size]();
   robotPosY = new int [size]();
+  robotinitial = new char [size](); 
 }
 
 GenericRobot :: ~GenericRobot () // destructor
 {
   delete [] robotPosX; // deallocate the memory
   delete [] robotPosY; // deallocate the memory 
+  delete [] robotinitial; // deallocate the memory
 }
 
 void GenericRobot ::get_robotPos(const string& filename) // get the robot position
@@ -180,6 +183,15 @@ void GenericRobot ::get_robotPos(const string& filename) // get the robot positi
   {
     if (line.find("GenericRobot") != string::npos) 
     {
+      size_t name_pos = line.find("Name:");
+      char initial = ' ';
+      
+      if(name_pos != string::npos){
+        size_t name_start = name_pos + 5; // Move past "Name;"
+        while (line[name_start] == ' ' || line[name_start] == ':') name_start++;
+        initial = line[name_start];
+      }
+
       if (line.find("Pos") != string::npos) // check if the line contain the robot position
       {
         int x_start = line.find("(") + 1; 
@@ -187,32 +199,30 @@ void GenericRobot ::get_robotPos(const string& filename) // get the robot positi
         int first_comma = line.find(","); 
         int y_start = line.find(",", first_comma + 1) + 1; // get the second comma in the line
         int y = stoi(line.substr(y_start, line.find(")"))); // get the robot position y
-
+      
+      
         if (x >= 0 && x < rows && y >= 0 && y < cols) // check if the robot position is in the map
         {  
           robotPosX[currentIndex] = x; 
           robotPosY[currentIndex] = y; 
+          robotinitial[currentIndex] = initial;
           currentIndex++; 
         }
       }
-
+    }
       else // random 
       {
         cout << "Error: Robot position not found" << endl;
       }
     }
-  }
   infile.close();
-
-
-}
-
+  }
+  
 void GenericRobot :: display_robotPos() // display the robot position in the map
 {
       for (int i = 0; i < size; i++)
       { 
-        char robot_name = 'A'+ i; // assign the robot position to 'R'
-        table[robotPosX[i]][robotPosY[i]] = robot_name; // assign the robot position to 'R'
+        table[robotPosX[i]][robotPosY[i]] = robotinitial[i]; // assign the robot position to 'R'
       }
 }
 
@@ -308,7 +318,7 @@ public:
 
     if (newX > 0 && newX < getRows() - 1 && newY > 0 && newY < getCols() - 1) 
     {
-        cout << "Robot '" << char ('A' + robotIndex) << "' moves from (" 
+        cout << "Robot '" <<  (robotinitial + robotIndex) << "' moves from (" 
               << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ") to (" 
               << newX << "," << newY << ")" << endl;
         robotPosX[robotIndex] = newX;
@@ -316,14 +326,14 @@ public:
     } 
     else 
     {
-        cout << "Robot '" << char ('A' + robotIndex) << "' stays at (" 
+        cout << "Robot '" <<  (robotinitial + robotIndex) << "' stays at (" 
               << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ")" << endl;
     }
 
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
     {
-        table[robotPosX[i]][robotPosY[i]] = char ('A' + i);
+        table[robotPosX[i]][robotPosY[i]] = robotinitial[i];
     }
     display_map();
     cout << endl;
@@ -346,7 +356,7 @@ public:
     int centreX = robotPosX[robotIndex] + offsetX;
     int centreY = robotPosY[robotIndex] + offsetY;
 
-    cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
+    cout << "Robot " << (robotinitial + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
 
     for (int dx = -1; dx <= 1; dx++) //left to right
     {
