@@ -260,6 +260,7 @@ public:
             if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
             {
                 table[targetX][targetY] = 'X'; // Mark destroyed robot
+                respawnRobot(targetName);
             }
         }
         else
@@ -343,6 +344,29 @@ public:
     {
       cout << "Robot A found no nearby targets to fire at." << endl;
     }
+}
+
+void respawnRobot(char robotName)
+{
+  int attempts = 0;
+  const int MAX_ATTEMPTS = 100;
+
+  while (attempts < MAX_ATTEMPTS)
+  {
+    int x = rand() % rows;
+    int y = rand() % cols;
+
+    if (table[x][y] == '.')
+    {
+      table[x][y] = robotName;
+      cout << "Robot " << robotName << " has respawned at (" << x << "," << y << ")" << endl;
+      return;
+    }
+
+    attempts++;
+  }
+
+  cout << "Failed to respawn robot " << robotName << ". No free space found." << endl;
 }
 int getShells() const
     {
