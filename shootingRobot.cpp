@@ -173,10 +173,11 @@ void Robot ::get_robotPos(const string& filename) // get the robot position
       if (line.find("Pos") != string::npos) // check if the line contain the robot position
       {
         int x_start = line.find("(") + 1;
-        int x = stoi(line.substr(x_start, line.find(",")));  // get the robot position x
+        int x = stoi(line.substr(x_start, line.find(",")));  
         int first_comma = line.find(",");
-        int y_start = line.find(",", first_comma + 1) + 1; // get the second comma in the line
-        int y = stoi(line.substr(y_start, line.find(")"))); // get the robot position y
+        int y_start = line.find(",", first_comma + 1) + 1; 
+        int y = stoi(line.substr(y_start, line.find(")")));
+
 
         if (x >= 0 && x < rows && y >= 0 && y < cols) // check if the robot position is in the map
         {
@@ -205,6 +206,9 @@ void Robot :: display_robotPos() // display the robot position in the map
         {
           char robot_name = 'A'+ i; // assign the robot position to 'R'
           table[robotPosX[i]][robotPosY[i]] = robot_name; // assign the robot position to 'R'
+
+          //testing
+          cout << "Placed Robot " << robot_name << " at (" << robotPosX[i] << "," << robotPosY[i] << ")" << endl;
         }
       }
 }
@@ -222,13 +226,9 @@ class Shooting : public Robot
             srand(time(0)); // Seed random once
         }
 
-        int getRobotPosX(int i) const { return robotPosX[i]; }
-        int getRobotPosY(int i) const { return robotPosY[i]; }
-        char getRobotName(int i) const { return 'A' + i; }
-
-        bool isAlive(int i) const
+        int getShells() const
         {
-          return table[robotPosX[i]][robotPosY[i]] != 'X';
+          return shells;
         }
 
         bool fire(char robotName, int currentX, int currentY, int dx, int dy)
@@ -278,48 +278,62 @@ class Shooting : public Robot
         return true;
     }
     
-    void autoFire()
+    void autoFireNearest(char robotName)
     {
-      int n = getPos_array();
+      int myX = -1, myY = -1;
 
-      for (int i = 0, i < n; ++i)
+      for (int i = 0; i < rows; ++i)
       {
-        if (!isAlive(i)) continue;
-
-        int x1 = getRobotPosX(i);
-        int y1 = getRobotPosY(i);
-        char name1 = getRobotName(i);
-
-        int minDist = 1e9;
-        int targetDx = 0, targetDy = 0;
-
-        for (int j = 0; j < n; ++j)
+        for (int j = 0; j < cols; ++j)
         {
-          if (i == j || !isAlive(j)) continue;
-
-          int x2 = getRobotPosX(j);
-          int y2 = getRobotPosY(j);
-
-          int dx = x2 - x1;
-          int dy = y2 - y1;
-          int dist = abs(dx) + abs(dy);
-
-          if (dist < minDist)
+          if (table[i][j] == robotName)
           {
-            minDist = dist;
-            targetDx = (dx == 0 ? 0 : dx / abs(dx));
-            targetDy = (dy == 0 ? 0 : dy / abs(dy));
+            myX = i;
+            myY = j;
+            break;
+          }
+        }
+        if (myX != -1)
+        break;
+
+        if (myX == -1)
+        {
+          cout << "Robot " << robotName << " not found on map" << endl;
+          return;
+        }
+
+        int nearestDist = 1e9;
+        int targetX = -1, targetY = -1;
+
+        for (int i = 0; i < rows; ++i)
+        {
+          for (int j = 0; j < cols; ++j)
+          {
+            char cell = table[i][j];
+            if (cell >= 'A' && cell <= 'Z' && cell != robotName)
+            {
+              int dist = abs(i - myX) + abs(j - myY);
+              if (dist < nearestDist)
+              {
+                nearestDist = dist;
+                targetX = i;
+                targetY = j;
+              }
+            }
           }
         }
 
-        if (targetDx == 0 && targetDy == 0) continue;
-        fire(name1, x1, y1, targetDx, targetDy);
+        if (targetX != -1)
+        {
+          int dx = targetX - myX;
+          int dy = targetY - myY;
+          fire(robotName, myX, myY, dx, dy);
+        }
+        else
+        {
+          cout << "No target found for robot " << robotName << "." << endl;
+        }
       }
-    }
-
-    int getShells() const
-    {
-        return shells;
     }
 };
 
@@ -334,10 +348,8 @@ int main()
   robot.create_map();
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
-  robot.autoFire();
+  robot.autoFireNearest('A');
   robot.display_map(); // display the map
-  cout << "Closing program..." << endl;
-
 
 
   return 0;
