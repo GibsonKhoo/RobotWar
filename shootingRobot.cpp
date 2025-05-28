@@ -260,7 +260,7 @@ public:
             if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
             {
                 table[targetX][targetY] = 'X'; // Mark destroyed robot
-                respawnRobot(targetName);
+                respawnRobot(targetName, targetX, targetY);
             }
         }
         else
@@ -346,8 +346,10 @@ public:
     }
 }
 
-void respawnRobot(char robotName)
+void respawnRobot(char robotName, int oldX, int oldY)
 {
+  table[oldX][oldY] = '.';
+
   int attempts = 0;
   const int MAX_ATTEMPTS = 100;
 
