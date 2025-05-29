@@ -413,6 +413,123 @@ void longShotBot(char robotName)
   }
 }
 
+void thirtyShotBot(char robotName)
+{
+  //Reset the shell count to 30
+  shells = 30;
+  shellsUsed = 0;
+
+  int rx = -1, ry = -1;
+  if (!findRobotPosition(robotName, rx, ry))
+  {
+    cout << "Robot " << robotName << " not found." << endl;
+    return;
+  }
+
+  bool fired = false;
+
+  for (int dx = -5; dx <= 5; dx++)
+  {
+    for (int dy = -5; dy <= 5; dy++)
+    {
+      if (abs(dx) + abs(dy) > 5 || (dx == 0 && dy == 0))
+      continue;
+
+      int tx = rx + dx;
+      int ty = ry + dy;
+
+      if (tx >= 0 && tx < rows && ty >= 0 & ty < cols)
+      {
+        char target = table[tx][ty];
+        if (target >= 'B' && target <= 'Z')
+        {
+          cout << "ThirtyShotBot " << robotName << " sees robot " << target
+               << " at (" << tx << "," << ty << ") from (" << rx << "," << ry << ")" << endl;
+          fire(robotName, rx, ry, dx, dy, target);
+          fired = true;
+
+          if (shells <= 0)
+          {
+            cout << "ThirtyShotBot " << robotName << " has run out of shells." << endl;
+            return;
+          }
+        }
+      }
+    }
+  }
+
+  if (!fired)
+  {
+    cout << "ThirtyShotBot " << robotName << " found no targets within range 5." << endl;
+  }
+}
+
+void semiAutoBot(char robotName)
+{
+  int rx = -1, ry = -1;
+  if (!findRobotPosition(robotName, rx, ry))
+  {
+    cout << "Robot " << robotName << " not found." << endl;
+    return;
+  }
+
+  int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+  int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+  for (int d = 0; d < 8; d++)
+  {
+    int tx = rx + dx[d];
+    int ty = ry + dy[d];
+
+    if (tx >= 0 && tx < rows && ty >= 0 && ty < cols)
+    {
+      char target = table[tx][ty];
+      if (target >= 'B' && target <= 'Z')
+      {
+        cout << "SemiAutoBot " << robotName << " sees robot " << target
+             << " at (" << tx << "," << ty << "). Firing 3 shots..." << endl;
+
+        for (int i = 0; i < 3; i++)
+        {
+          if (getShells() <= 0)
+          {
+            cout << "Out of shells during semi-auto fire!" << endl;
+            return; 
+          }
+
+          int chance = rand() % 100;
+          if (chance < 70)
+          {
+            if (table[tx][ty] != '.' && table[tx][ty] != '+' && table[tx][ty] != 'X')
+            {
+              cout << "Shot " << (i + 1) << ": HIT! Destroyed " << target << endl;
+               table[tx][ty] = 'X';
+               respawnRobot(target, tx, ty);
+            }
+            else
+            {
+              cout << "Shot " << (i + 1) << ": HIT! But target already destroyed." << endl;
+            }
+          }
+          else
+          {
+            cout << "Shot " << (i + 1) << ": Missed." << endl;
+          }
+
+          shells--;
+          shellsUsed++;
+        }
+
+        cout << "SemiAutoBot used 3 shells. Remaining: " << shells << endl;
+        return;
+      }
+    }
+  }
+
+  cout << "SemiAutoBot " << robotName << " found no targets nearby." << endl; 
+}
+
+
 int getShells() const
     {
         return shells;
@@ -430,6 +547,8 @@ int main()
   robot.get_robotPos(filename); // get the robot position
   robot.display_robotPos();
   robot.autoFireNearest();
+  robot.thirtyShotBot('A');
+  robot.semiAutoBot('A');
   robot.display_map(); // display the map
   cout << "Closing the program..." << endl;
 
