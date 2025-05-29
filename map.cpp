@@ -244,7 +244,6 @@ void GenericRobot :: set_steps(const string& filename) // get the steps
   infile.close(); // close the file 
 }
 
-
 void GenericRobot :: self_destruct(int robotIndex) // self destruct the robot
 {
   table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.'; 
@@ -284,31 +283,31 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
   }
 }
 
-class ShootingRobot
+class ShootingRobot : virtual public GenericRobot 
 {
 public:  
   virtual void shoot(int robotIndex, int dx, int dy, char targetName) = 0; // pure virtual function for shooting
 };
 
-class MovingRobot 
+class MovingRobot : virtual public GenericRobot
 {
 public:
   virtual void move(const string& filename, int robotIndex) = 0; // pure virtual function for moving
 };
 
-class ThinkingRobot 
+class ThinkingRobot : virtual public GenericRobot
 {
 public:
   virtual void think(const string& filename, int robotIndex) = 0; 
 };
 
-class LookingRobot 
+class LookingRobot : virtual public GenericRobot
 {
 public:
-  virtual bool look(int robotIndex) = 0; // pure virtual function for looking around
+  virtual void look(int robotIndex) = 0; // pure virtual function for looking around
 };
 
-class ScoutRobot : public LookingRobot, public GenericRobot
+class ScoutRobot : public LookingRobot
 {
 private:
   int remainingScout; // number of scouts available
@@ -316,12 +315,12 @@ private:
 public: 
   ScoutRobot(const string& filename): GenericRobot(filename), remainingScout(3) {} // constructor
 
-  bool look(int robotIndex) override
+  void look(int robotIndex) override
   {
     if (remainingScout <= 0)
     {
       cout << "No scouts left." << endl;
-      return false;
+      return;
     }
 
     else
@@ -341,13 +340,13 @@ public:
           }
         }
       }
-      return true; // scout found the enemy
+      return; // scout found the enemy
     }
   }
 };
 
 
-class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, public ThinkingRobot, public LookingRobot// multiple inheritance  
+class Robot : public ShootingRobot, public MovingRobot, public ThinkingRobot, public ScoutRobot// multiple inheritance  
 {
 public:
   Robot(const string& filename); // constructor
@@ -410,19 +409,8 @@ public:
     bool fired = false;  
     bool found = false; // check if the robot found any target
 
-    if (look(robotIndex) == true)
-    {
-      found = true; 
-      fired = true; 
-      move(filename, robotIndex); 
-    }
-
-    else
-    {
-      cout << "Robot " << char ('A' + robotIndex) <<" found no nearby targets to fire at." << endl;
-      move(filename, robotIndex); 
-    }
-
+    look(robotIndex);
+    move(filename, robotIndex); 
 
   } 
 
@@ -438,14 +426,14 @@ public:
     int newY = robotPosY[robotIndex];
 
     switch (dir) {
-        case 1: newX -= 1; break; // up
-        case 2: newX += 1; break; // down
-        case 3: newY -= 1; break; // left
-        case 4: newY += 1; break; // right
-        case 5 : newX -= 1; newY -= 1; break; // up left
-        case 6 : newX -= 1; newY += 1; break; // up right
-        case 7 : newX += 1; newY -= 1; break; // down left
-        case 8 : newX += 1; newY += 1; break; // down right
+        case 0: newX -= 1; break; // up
+        case 1: newX += 1; break; // down
+        case 2: newY -= 1; break; // left
+        case 3: newY += 1; break; // right
+        case 4 : newX -= 1; newY -= 1; break; // up left
+        case 5 : newX -= 1; newY += 1; break; // up right
+        case 6 : newX += 1; newY -= 1; break; // down left
+        case 7 : newX += 1; newY += 1; break; // down right
         default: break; // stay in place
     }
 
@@ -462,7 +450,7 @@ public:
         {
           cout << "Robot '" << char ('A' + robotIndex) << "' cannot move to (" 
                 << newX << "," << newY << ") as it is occupied." << endl;
-          return; // cannot move to occupied position
+          
         }
         else 
         {
@@ -477,6 +465,11 @@ public:
       
     }
 
+    else 
+    {
+      cout << "Robot '" << char ('A' + robotIndex) << "' cannot move outside the battlefield." << endl;
+    }
+
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
     {
@@ -487,16 +480,17 @@ public:
        
   }
   
-  bool look(int robotIndex) override
+  void look(int robotIndex) override
   {
     int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1}; //left, up-left, up, down-right, right, down, down-left, up-right
     int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
+    
 
     if (robotIndex >= size) //check if the robot exist
     {
       cout << "Invalid robot index." << endl;
-      return false;
+      return ;
     }
 
     else 
@@ -516,41 +510,26 @@ public:
           {
             if (target_name != ('A' + robotIndex)) // check if the target is not itself
             {
-              cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+              cout << "Robot" << char ('A' + robotIndex) <<"detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
               shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
-              return true;
+              return;
 
             }
           }
 
-          // checking if the looking function is working correctly 
-          // if (target_x == robotPosX[robotIndex] && target_y == robotPosY[robotIndex])
-          // {
-          //   cout << "Own self is at (" << target_x << ", " << target_y << ")." << endl;
-          // }
-
-          // else if (target >= 'A' && target <= 'Z') //robot found
-          // {
-          //   cout << "Enemy is at (" << target_x << ", " << target_y << ")" << endl;
-          // }
-
-          // else
-          // {
-          //   cout << "(" << target_x << ", " << target_y << ") is empty." << endl;
-          // }
         }
         else
         {
           cout << "Out of battlefield at (" << target_x << ", " << target_y << ")" << endl;
         }
       }
-      return false; // if no target found
+      return; // if no target found
     }
   }
 
 };
 
-Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
+Robot ::Robot(const string& filename) : GenericRobot(filename), ScoutRobot(filename) // constructor
 {
   srand((unsigned)time(0)); // make sure the random number generator is seeded
                             // so that the robot can move randomly
