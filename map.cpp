@@ -3,7 +3,6 @@
 #include <string>
 #include <ctime>
 
-
 using namespace std; 
 
 class Map 
@@ -142,7 +141,9 @@ class GenericRobot : public Map // initial class for robot
     int get_steps() const {
       return steps; // return the steps number
     }
-  };
+
+    void respawnRobot(char targetName);
+};
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
 {
@@ -233,39 +234,66 @@ void GenericRobot :: set_steps(const string& filename) // get the steps
   infile.close(); // close the file 
 }
 
-
-
-
-class ShootingRobot // class for shoot function
+void GenericRobot :: respawnRobot (char targetName)
 {
+      int targetIndex = targetName - 'A'; // flw ascii value to get the index
+      int newX, newY;
+
+      // Remove from old position
+      table[robotPosX[targetIndex]][robotPosY[targetIndex]] = '.';
+
+      // Find a random empty spot
+      do {
+          newX = rand() % rows; 
+          newY = rand() % cols;
+      } while (table[newX][newY] != '.');
+
+      // Update robot position
+      robotPosX[targetIndex] = newX;
+      robotPosY[targetIndex] = newY;
+
+      cout << "Robot " << char ('A' + targetIndex) << " respawned at (" << newX << "," << newY << ")" << endl;
+}
+
+
+class ShootingRobot
+{
+protected:
+  int shells; // number of shells
+  int shellsUsed = 0; // number of shells used
+
+
+
 public:
-  virtual void shoot() = 0; // pure virtual function for shooting
+  ShootingRobot(int initialShells = 10) : shells(initialShells) {} // constructor with default shells
+  
+  virtual void shoot(int robotIndex, int dx, int dy, char targetName) = 0; // pure virtual function for shooting
 };
 
-class MovingRobot // class for move function
+class MovingRobot 
 {
 public:
   virtual void move(const string& filename, int robotIndex) = 0; // pure virtual function for moving
 };
 
-class ThinkingRobot // class for think function
+class ThinkingRobot 
 {
 public:
-  virtual void think() = 0; // pure virtual function for thinking
+  virtual void think(const string& filename, int robotIndex) = 0; 
 };
 
-class LookingRobot // class for look function
+class LookingRobot 
 {
 public:
-  virtual void look(int robotIndex, int offsetX, int offsetY) = 0; // pure virtual function for looking around
+  virtual bool look(int robotIndex) = 0; // pure virtual function for looking around
 };
 
 class Upgrade // class for upgrade function
 {
 public: 
-  virtual void look(int robotIndex, int offsetX, int offsetY) = 0; 
+  virtual bool look(int robotIndex) = 0; 
 
-  virtual ~Upgrade() {} // virtual destructor for cleanup
+  virtual ~Upgrade() {}
 };
 
 
@@ -274,14 +302,72 @@ class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, pub
 public:
   Robot(const string& filename); // constructor
 
-  void shoot() override 
+  void shoot(int robotIndex, int dx, int dy, char targetName) override 
   {
-    cout << "Robot shoots!" << endl; 
+    int currentX = robotPosX[robotIndex]; // get the current position of the robot
+    int currentY = robotPosY[robotIndex]; // get the current position of the robot
+
+    if (shells <= 0)
+    {
+        cout << "Robot " << char('A' + robotIndex) << " has no shells left and self-destructs!" << endl;
+        table[currentX][currentY] = '.'; // mark self-destruct 
+        return; 
+    }
+
+    if (dx == 0 && dy == 0) // cannot suicide 
+    {
+        cout << "Robot " << char('A' + robotIndex) << " tried to fire at itself! Not allowed." << endl;
+        return;
+    }
+
+    int targetX = currentX + dx;
+    int targetY = currentY + dy;
+
+    if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols) // check if surrounding got robot onot
+    {
+        cout << "Target out of bounds. Fire action aborted." << endl;
+    }
+
+    int hitChance = rand() % 100; //random probabiblity to shoot 
+
+    if (hitChance < 70)
+    {
+        cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
+        if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
+        {
+            respawnRobot(targetName);
+
+            shells--;
+            shellsUsed++;
+        }
+    }
+    else
+    {
+        cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and misses." << endl;
+    }
+
+    cout << "Bullets used: " << shellsUsed << ", Bullets left: " << shells << endl; 
   }
 
-  void think() override 
+  void think(const string& filename, int robotIndex) override 
   {
-    cout << "Robot is thinking!" << endl; 
+    bool fired = false;  
+    bool found = false; // check if the robot found any target
+
+    if (look(robotIndex) == true)
+    {
+      found = true; 
+      fired = true; 
+      move(filename, robotIndex); 
+    }
+
+    else
+    {
+      cout << "Robot " << char ('A' + robotIndex) <<" found no nearby targets to fire at." << endl;
+      move(filename, robotIndex); 
+    }
+
+    cout << "thinking... seeing... shooting... moving... " << endl;
   } 
 
   void move(const string& filename, int robotIndex) override 
@@ -330,58 +416,69 @@ public:
        
   }
   
-  void look(int robotIndex, int offsetX, int offsetY) override
+  bool look(int robotIndex) override
   {
+    int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1}; //left, up-left, up, down-right, right, down, down-left, up-right
+    int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+
     if (robotIndex >= size) //check if the robot exist
     {
       cout << "Invalid robot index." << endl;
-      return;
+      return false;
     }
 
-    if (offsetX < -1 || offsetX > 1 || offsetY < -1 || offsetY > 1) //to make sure robot is only looking one step around it
+    else 
     {
-      cout << "Error: you can only look at 8 neighbouring location or your own location." << endl;
-    }
+      cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
 
-    int centreX = robotPosX[robotIndex] + offsetX;
-    int centreY = robotPosY[robotIndex] + offsetY;
+      for (int d = 0; d < 8; d++) // check all 8 directions
+      {
+        int target_x = robotPosX[robotIndex] + dx[d]; // target robot position x
+        int target_y = robotPosY[robotIndex] + dy[d];  // target robot position y
 
-    cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << centreX << ", " << centreY << ")" << endl;
-
-    for (int dx = -1; dx <= 1; dx++) //left to right
-    {
-      for (int dy = -1; dy <= 1; dy++) //top to bottom
-     {
-       int newX = centreX + dx;
-       int newY = centreY + dy;
-
-        if (newX >= 0 && newX < rows && newY >= 0 && newY < cols) //to check if robot is in battlefield range
+        if (target_x >= 0 && target_x < rows && target_y >= 0 && target_y < cols) 
         {
-          char cell = table[newX][newY];
-        
-          if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex])
+          char target_name = table[target_x][target_y];
+
+          if (target_name >= 'A' && target_name <= 'Z')
           {
-           cout << "Own self is at (" << newX << ", " << newY << ")." << endl;
+            if (target_name != ('A' + robotIndex)) // check if the target is not itself
+            {
+              cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+              shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
+              return true;
+
+            }
           }
 
-          else if (cell >= 'A' && cell <= 'Z') //robot found
-          {
-            cout << "Enemy is at (" << newX << ", " << newY << ")" << endl;
-          }
+          // checking if the looking function is working correctly 
+          // if (target_x == robotPosX[robotIndex] && target_y == robotPosY[robotIndex])
+          // {
+          //   cout << "Own self is at (" << target_x << ", " << target_y << ")." << endl;
+          // }
+
+          // else if (target >= 'A' && target <= 'Z') //robot found
+          // {
+          //   cout << "Enemy is at (" << target_x << ", " << target_y << ")" << endl;
+          // }
 
           // else
           // {
-          //  cout << "(" << newX << ", " << newY << ") is empty." << endl;
+          //   cout << "(" << target_x << ", " << target_y << ") is empty." << endl;
           // }
         }
-
         else
         {
-         cout << "Out of battlefield at (" << newX << ", " << newY << ")" << endl;
+          cout << "Out of battlefield at (" << target_x << ", " << target_y << ")" << endl;
         }
       }
+      return false; // if no target found
     }
   }
+
+    
+
 };
 
 Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
@@ -390,7 +487,7 @@ Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
                             // so that the robot can move randomly    
 } 
 
-
+/*
 class ScoutRobot : public Upgrade, public Robot // ScoutRobot inherits from Upgrade and Robot
 {
 private:
@@ -427,7 +524,7 @@ public:
     }
   }
 };
-
+*/
 
 
 int main()
@@ -450,18 +547,14 @@ int main()
   while (gameStart && numSteps > 0) // game starts and steps are available
   {
     
-    cout << "Round " << round << endl;
-    for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) 
+    cout << " ---------------- Round " << round  << " -----------------" << endl;
+    for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     {
-        
-        robot.think();
-        robot.shoot();
-        robot.look(robotIndex, 0, 0); 
-        robot.move(filename, robotIndex); 
+        robot.think(filename, robotIndex); 
     }
 
-    numSteps--; // decrease the steps after each robot move
-    round++; // increase the round after each robot move
+    numSteps--; 
+    round++; 
 
     if (numSteps <= 0) 
     {
