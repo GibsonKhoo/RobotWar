@@ -431,7 +431,7 @@ int main()
   robot.display_robotPos();
   robot.autoFireNearest();
   robot.display_map(); // display the map
-
+  cout << "Closing the program..." << endl;
 
   return 0;
 };
