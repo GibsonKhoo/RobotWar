@@ -370,6 +370,49 @@ void respawnRobot(char robotName, int oldX, int oldY)
 
   cout << "Failed to respawn robot " << robotName << ". No free space found." << endl;
 }
+
+void longShotBot(char robotName)
+{
+  int rx = -1, ry = -1;
+  if (!findRobotPosition(robotName, rx, ry))
+  {
+    cout << "Robot " << robotName << " not found." << endl;
+    return;
+  }
+
+  bool fired = false;
+
+  for (int dx = -3; dx <= 3; dx++)
+  {
+    for (int dy = -3; dy <= 3; dy++)
+    {
+      if (abs(dx) + abs(dy) > 3 || (dx == 0 && dy == 0))
+      continue;
+
+      int tx = rx + dx;
+      int ty = ry + dy;
+
+      if (tx >= 0 && tx < rows && ty >= 0 && ty < cols)
+      {
+        char target = table[tx][ty];
+        if (target >= 'B' && target <= 'Z')
+        {
+          cout << "LongShotBot " << robotName << " sees robot " << target
+               << " at (" << tx << "," << ty << ") from (" << rx << "," << ry << endl;
+          fire(robotName, rx, ry, dx, dy, target);
+          fired = true;
+          return; //fire only one target at a time      
+        } 
+      }
+    }
+  }
+
+  if (!fired)
+  {
+    cout << "LongShotBot " << robotName << " found no targets within range 3." << endl;
+  }
+}
+
 int getShells() const
     {
         return shells;

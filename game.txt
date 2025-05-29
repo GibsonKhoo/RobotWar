@@ -2,8 +2,8 @@ Columns by Rows : 10, 20
 steps: 300
 robots: 5
 GenericRobot1 Name: Kidd , Pos : (3,6)
-GenericRobot2 Name: Jett , Pos : (5,1)
-GenericRobot3 Name: Alpha , Pos : (3,7)
+GenericRobot2 Name: Jett , Pos : (3,7)
+GenericRobot3 Name: Alpha , Pos : (3,5)
 GenericRobot4 Name: Beta , Pos : (3,16)
 GenericRobot5 Name: Star , Pos : (2,10)
 
