@@ -234,7 +234,7 @@ public:
             return false;
         }
 
-        if (dx == 0 && dy == 0)
+        if (dx == 0 && dy == 0) // cannot suicide 
         {
             cout << "Robot " << robotName << " tried to fire at itself! Not allowed." << endl;
             return false;
@@ -243,7 +243,7 @@ public:
         int targetX = currentX + dx;
         int targetY = currentY + dy;
 
-        if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols)
+        if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols) // check if surrounding got robot onot
         {
             cout << "Target out of bounds. Fire action aborted." << endl;
             return false;
@@ -301,8 +301,8 @@ public:
         {
           if (table[i][j] == 'A')
           {
-            ax = i;
-            ay = j;
+            ax = i; // get the position x of Robot
+            ay = j; // get the position y of Robot 
             break;
           }
         }
@@ -315,28 +315,28 @@ public:
         return;
       }
 
-      int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+      int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1}; //left, up-left, up, down-right, right, down, down-left, up-right
       int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
       bool fired = false;
 
       for (int d = 0; d < 8; d++)
       {
-        int nx = ax + dx[d];
-        int ny = ay + dy[d];
+        int nx = ax + dx[d]; // target robot position x
+        int ny = ay + dy[d];  // target robot position y
 
-      if (nx >= 0 && nx < rows && ny >= 0 && ny < cols)
-      {
-        char target = table[nx][ny];
-
-        if (target >= 'B' && target <= 'Z')
+        if (nx >= 0 && nx < rows && ny >= 0 && ny < cols) 
         {
-          cout << "Robot A detects robot " << target << " at (" << nx << "," << ny << ")" << endl;
-          fire('A', ax, ay, dx[d], dy[d], target);
-          fired = true;
-          break;
+          char target = table[nx][ny];
+
+          if (target >= 'B' && target <= 'Z')
+          {
+            cout << "Robot A detects robot " << target << " at (" << nx << "," << ny << ")" << endl;
+            fire('A', ax, ay, dx[d], dy[d], target);
+            fired = true;
+            break;
+          }
         }
-      }
       } 
     
 
