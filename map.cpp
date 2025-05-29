@@ -122,6 +122,8 @@ class GenericRobot : public Map // initial class for robot
     int * shells;
     int * shellsUsed; 
 
+    int * kill;
+
   public:
     void setRobot_num (int s) {
       size = s; 
@@ -148,7 +150,10 @@ class GenericRobot : public Map // initial class for robot
     void self_destruct(int robotIndex);
 
     void set_shells (); 
+
     void respawnRobot(char targetName);
+
+    void set_kill();
 };
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
@@ -173,6 +178,8 @@ GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constru
   robotPosY = new int [size]();
   shells = new int[size](); 
   shellsUsed = new int[size](); 
+  kill = new int[size](); // kill count for each robot
+  
 }
 
 GenericRobot :: ~GenericRobot () // destructor
@@ -283,6 +290,14 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
   }
 }
 
+void GenericRobot :: set_kill() // set the kill count for each robot
+{
+  for (int i = 0; i < size; i++)
+  {
+    kill[i] = 0; // each robot has 0 kills
+  }
+}
+
 class ShootingRobot : virtual public GenericRobot 
 {
 public:  
@@ -313,7 +328,7 @@ private:
   int remainingScout; // number of scouts available
 
 public: 
-  ScoutRobot(const string& filename): GenericRobot(filename), remainingScout(3) {} // constructor
+  ScoutRobot(const string& filename): GenericRobot(filename), remainingScout(3) {} // default constructor
 
   void look(int robotIndex) override
   {
@@ -381,6 +396,8 @@ public:
           {
               respawnRobot(targetName); // shoot and target respawn 
           }
+          kill[robotIndex]++; 
+          cout << "kills: "<<kill[robotIndex] << endl; 
       }
       else
       {
