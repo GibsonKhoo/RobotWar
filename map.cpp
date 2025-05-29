@@ -184,7 +184,7 @@ void GenericRobot ::get_robotPos(const string& filename) // get the robot positi
     if (line.find("GenericRobot") != string::npos) 
     {
       size_t name_pos = line.find("Name:");
-      char initial = '?';
+      char initial = ' ';
       if(name_pos != string::npos){
         size_t name_start = name_pos + 5; // Move past "Name;"
         while (line[name_start] == ' ' || line[name_start] == ':') name_start++;
@@ -316,7 +316,7 @@ public:
 
     if (newX > 0 && newX < getRows() - 1 && newY > 0 && newY < getCols() - 1) 
     {
-        cout << "Robot '" << char ('A' + robotIndex) << "' moves from (" 
+        cout << "Robot '" << robotinitials[robotIndex] << "' moves from (" 
               << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ") to (" 
               << newX << "," << newY << ")" << endl;
         robotPosX[robotIndex] = newX;
@@ -324,14 +324,14 @@ public:
     } 
     else 
     {
-        cout << "Robot '" << char ('A' + robotIndex) << "' stays at (" 
+        cout << "Robot '" << robotinitials[robotIndex] << "' stays at (" 
               << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ")" << endl;
     }
 
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
     {
-        table[robotPosX[i]][robotPosY[i]] = char ('A' + i);
+        table[robotPosX[i]][robotPosY[i]] = robotinitials[i]; 
     }
     display_map();
     cout << endl;
