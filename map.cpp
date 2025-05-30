@@ -60,7 +60,7 @@ Map ::Map(const string& filename) // get the map size // constructor
 
 Map :: ~Map () // destructor
 {
-  cout << "Destroying map..." << endl;
+  cout << "Game Over" << endl;
   destroy_map(); // deallocate the memory
 }
 
@@ -118,9 +118,19 @@ class GenericRobot : public Map // initial class for robot
     int currentIndex = 0;
 
     int steps = 0; //will be updated to 300
+    int live = 0;
 
     int * shells;
     int * shellsUsed; 
+
+    int * kill;
+
+    int * lives;
+
+    bool * lookUpgraded; // check if robot is upgraded for looking 
+    int * lookUpgradeType; // check which one the robot upgraded to 
+
+    
 
   public:
     void setRobot_num (int s) {
@@ -148,7 +158,18 @@ class GenericRobot : public Map // initial class for robot
     void self_destruct(int robotIndex);
 
     void set_shells (); 
+
     void respawnRobot(char targetName);
+
+    void set_kill();
+
+    void set_lives(const string& filename);
+
+    int get_live(int robotIndex){
+      return lives[robotIndex];
+    }; 
+
+    int check_map();
 };
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
@@ -167,12 +188,25 @@ GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constru
     }
   }
 
-  infile.close(); // close the file 
+  infile.close(); // close the file
 
   robotPosX = new int [size]();
   robotPosY = new int [size]();
   shells = new int[size](); 
   shellsUsed = new int[size](); 
+  kill = new int[size](); // kill count for each robot
+  lives = new int[size](); // lives for each robot
+
+  lookUpgraded = new bool [size](); // check if each robot upgraded for looking 
+  lookUpgradeType = new int [size](); // 0 = no upgrade, 1 = scout
+  for (int i = 0; i < size; i++)
+  {
+    lookUpgradeType[i] = 0; // default all robot no upgrade 
+  }
+
+
+
+
 }
 
 GenericRobot :: ~GenericRobot () // destructor
@@ -181,6 +215,10 @@ GenericRobot :: ~GenericRobot () // destructor
   delete [] robotPosY; 
   delete [] shells; 
   delete [] shellsUsed; 
+  delete [] kill;
+
+  delete [] lookUpgraded;
+  delete [] lookUpgradeType;
 }
 
 void GenericRobot ::get_robotPos(const string& filename) // get the robot position
@@ -244,7 +282,6 @@ void GenericRobot :: set_steps(const string& filename) // get the steps
   infile.close(); // close the file 
 }
 
-
 void GenericRobot :: self_destruct(int robotIndex) // self destruct the robot
 {
   table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.'; 
@@ -268,7 +305,7 @@ void GenericRobot :: respawnRobot (char targetName)
       robotPosX[targetIndex] = newX;
       robotPosY[targetIndex] = newY;
 
-      cout << "Robot " << char ('A' + targetIndex) << " respawned at (" << newX << "," << newY << ")" << endl;
+      //cout << "Robot " << char ('A' + targetIndex) << " respawned at (" << newX << "," << newY << ")" << endl;
 }
 
 void GenericRobot :: set_shells() // set the shells and used shells for each robot
@@ -284,49 +321,99 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
   }
 }
 
-class ShootingRobot
+void GenericRobot :: set_kill() // set the kill count for each robot
+{
+  for (int i = 0; i < size; i++)
+  {
+    kill[i] = 0; // each robot has 0 kills
+  }
+}
+
+void GenericRobot ::set_lives(const string& filename) // set the lives for each robot
+{
+  fstream infile; 
+  infile.open(filename); 
+  while (getline (infile,line))
+  {
+    if (line.find("lives:") != string::npos) // check if the line contain the lives
+    {
+      int live_start = line.find(":") + 1; 
+      int live_num = stoi(line.substr(live_start)); // get the lives number
+      live = live_num; // update the lives number
+    } 
+  }
+  infile.close(); 
+
+
+  for (int i = 0; i < size; i++) // set all robot lives
+  {
+    lives[i] = live; 
+  }
+
+}
+
+int GenericRobot :: check_map()
+{
+  int robot_alive = 0;
+
+  for (int i = 0; i < getRows(); i++)
+  {
+    for (int j = 0; j < getCols(); j++ )  
+    {
+      if (table[i][j] != '.' && table[i][j] != '+')
+      {
+        robot_alive ++;
+      }
+    }
+    
+  }
+  return robot_alive;
+}
+
+
+class ShootingRobot : virtual public GenericRobot 
 {
 public:  
   virtual void shoot(int robotIndex, int dx, int dy, char targetName) = 0; // pure virtual function for shooting
 };
 
-class MovingRobot 
+class MovingRobot : virtual public GenericRobot
 {
 public:
   virtual void move(const string& filename, int robotIndex) = 0; // pure virtual function for moving
 };
 
-class ThinkingRobot 
+class ThinkingRobot : virtual public GenericRobot
 {
 public:
   virtual void think(const string& filename, int robotIndex) = 0; 
 };
 
-class LookingRobot 
+class LookingRobot : virtual public GenericRobot
 {
 public:
-  virtual bool look(int robotIndex) = 0; // pure virtual function for looking around
+  virtual void look(int robotIndex) = 0; // pure virtual function for looking around
 };
 
-class ScoutRobot : public LookingRobot, public GenericRobot
+class ScoutRobot : public LookingRobot
 {
 private:
   int remainingScout; // number of scouts available
 
 public: 
-  ScoutRobot(const string& filename): GenericRobot(filename), remainingScout(3) {} // constructor
+  ScoutRobot(const string& filename): GenericRobot(filename), remainingScout(3) {} // default constructor
 
-  bool look(int robotIndex) override
-  {
+  void look(int robotIndex) override
+  {   
     if (remainingScout <= 0)
     {
-      cout << "No scouts left." << endl;
-      return false;
+      // cout << "No scouts left." << endl;
+      return;
     }
 
     else
     {
-      cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
+      cout << "Scout " << char('A'+ robotIndex) << " is using scout to scan the battlefield!" << endl;
       remainingScout--;
 
       for (int i = 0; i < getRows(); i++)
@@ -337,17 +424,18 @@ public:
 
           if (enemy >= 'A' && enemy <= 'Z')
           {
-            cout << "Enemy is at (" << i << ", " << j << ")" << endl; // display all the enemy pos
+            cout << "Enemies is at (" << i << ", " << j << ")" << endl; // display all the enemy pos
           }
         }
       }
-      return true; // scout found the enemy
-    }
+      cout << endl;
+      return; // scout found the enemy
+    } 
   }
 };
 
 
-class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, public ThinkingRobot, public LookingRobot// multiple inheritance  
+class Robot : public ShootingRobot, public MovingRobot, public ThinkingRobot, public ScoutRobot// multiple inheritance  
 {
 public:
   Robot(const string& filename); // constructor
@@ -359,7 +447,7 @@ public:
 
     int targetX = currentX + dx;
     int targetY = currentY + dy;
-
+    int targerNameIndex = targetName - 'A'; // get the index of the target robot
     int hitChance = rand() % 100; //random probabiblity to shoot 
 
 
@@ -382,6 +470,8 @@ public:
           {
               respawnRobot(targetName); // shoot and target respawn 
           }
+          kill[robotIndex]++; 
+          lives[targerNameIndex]--;
       }
       else
       {
@@ -394,14 +484,21 @@ public:
       cout << "Bullets used: " << shellsUsed[robotIndex] << ", Bullets left: " << shells[robotIndex] << endl; 
     }
 
-    for (int i =0; i < size; i++) // for all robots, check if the robot has shells left
+    for (int i =0; i < size; i++) // for all robots, check if the robot has shells left or lvies 
     {
         if (shells[i] <= 0)
         {
             cout << "Robot " << char('A' + i) << " has no shells left and self-destructs!" << endl;
             self_destruct(i); // self destruct the robot
             return; 
-        }   
+        }  
+        
+        if (lives[i] < 0)
+        {
+          cout << "Robot " << char('A' + i) << "has no live" << endl;
+          self_destruct(i);
+          return;
+        }
     }
   }
 
@@ -410,19 +507,8 @@ public:
     bool fired = false;  
     bool found = false; // check if the robot found any target
 
-    if (look(robotIndex) == true)
-    {
-      found = true; 
-      fired = true; 
-      move(filename, robotIndex); 
-    }
-
-    else
-    {
-      cout << "Robot " << char ('A' + robotIndex) <<" found no nearby targets to fire at." << endl;
-      move(filename, robotIndex); 
-    }
-
+    look(robotIndex);
+    move(filename, robotIndex); 
 
   } 
 
@@ -438,14 +524,14 @@ public:
     int newY = robotPosY[robotIndex];
 
     switch (dir) {
-        case 1: newX -= 1; break; // up
-        case 2: newX += 1; break; // down
-        case 3: newY -= 1; break; // left
-        case 4: newY += 1; break; // right
-        case 5 : newX -= 1; newY -= 1; break; // up left
-        case 6 : newX -= 1; newY += 1; break; // up right
-        case 7 : newX += 1; newY -= 1; break; // down left
-        case 8 : newX += 1; newY += 1; break; // down right
+        case 0: newX -= 1; break; // up
+        case 1: newX += 1; break; // down
+        case 2: newY -= 1; break; // left
+        case 3: newY += 1; break; // right
+        case 4 : newX -= 1; newY -= 1; break; // up left
+        case 5 : newX -= 1; newY += 1; break; // up right
+        case 6 : newX += 1; newY -= 1; break; // down left
+        case 7 : newX += 1; newY += 1; break; // down right
         default: break; // stay in place
     }
 
@@ -453,6 +539,7 @@ public:
     {
       if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex]) // check if the robot is not moving
       {
+
         cout << "Robot '" << char ('A' + robotIndex) << "' stays at (" 
               << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ")" << endl;
       }
@@ -462,7 +549,11 @@ public:
         {
           cout << "Robot '" << char ('A' + robotIndex) << "' cannot move to (" 
                 << newX << "," << newY << ") as it is occupied." << endl;
-          return; // cannot move to occupied position
+          
+          // stays at the pos 
+          int newX = robotPosX[robotIndex];
+          int newY = robotPosY[robotIndex];
+          return;
         }
         else 
         {
@@ -477,6 +568,11 @@ public:
       
     }
 
+    else 
+    {
+      cout << "Robot '" << char ('A' + robotIndex) << "' cannot move outside the battlefield." << endl;
+    }
+
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
     {
@@ -487,21 +583,74 @@ public:
        
   }
   
-  bool look(int robotIndex) override
+  void look(int robotIndex) override
   {
+      if (kill[robotIndex] == 1 && lookUpgradeType[robotIndex] == 0) // if the robot has killed any robot and no upgrade
+      {
+        int type = rand() % 2; // random upgrade to scout or track //0 , 1
+        bool upgradeTaken = false;
+        
+
+        for (int i =0; i < size; i++) // Check if any other robot already has this upgrade
+        {
+          if (i != robotIndex && lookUpgradeType[i] == type + 1) // type+1: 1=Scout, 2=Track
+          {
+            upgradeTaken = true;
+            break;
+          }
+        }
+        
+        if (!upgradeTaken) 
+        {
+        switch (type)
+        {
+          case 0: 
+              lookUpgradeType[robotIndex] = 1;
+              cout << "upgraded to ScoutBot" << endl;
+              break;
+
+          case 1: 
+              lookUpgradeType[robotIndex] = 2;  
+              cout << "upgraded to TrackBot" << endl; 
+              break;
+
+        }
+        lookUpgraded[robotIndex] = true;
+        
+      }
+      else 
+      {
+        cout << "Upgrade already taken by another robot. No upgrade applied." << endl;
+      }
+    }
+
+    if (lookUpgradeType[robotIndex] == 1)
+    {
+      if (rand() % 2 == 0) // 50% to use the skills
+      { 
+            ScoutRobot::look(robotIndex);
+            // return; // either can use skills next round after upgrade, or instant can use  
+        }
+    }
+    else if (lookUpgradeType[robotIndex] == 2)
+    {
+      cout << "TrackBot function" << endl;
+    }
+
+
     int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1}; //left, up-left, up, down-right, right, down, down-left, up-right
     int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
-
+    
     if (robotIndex >= size) //check if the robot exist
     {
       cout << "Invalid robot index." << endl;
-      return false;
+      return ;
     }
 
     else 
     {
-      cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
+      //cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
 
       for (int d = 0; d < 8; d++) // check all 8 directions
       {
@@ -516,46 +665,29 @@ public:
           {
             if (target_name != ('A' + robotIndex)) // check if the target is not itself
             {
-              cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+              //cout << "Robot " << char ('A' + robotIndex) <<" detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
               shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
-              return true;
+              return;
 
             }
           }
-
-          // checking if the looking function is working correctly 
-          // if (target_x == robotPosX[robotIndex] && target_y == robotPosY[robotIndex])
-          // {
-          //   cout << "Own self is at (" << target_x << ", " << target_y << ")." << endl;
-          // }
-
-          // else if (target >= 'A' && target <= 'Z') //robot found
-          // {
-          //   cout << "Enemy is at (" << target_x << ", " << target_y << ")" << endl;
-          // }
-
-          // else
-          // {
-          //   cout << "(" << target_x << ", " << target_y << ") is empty." << endl;
-          // }
         }
         else
         {
           cout << "Out of battlefield at (" << target_x << ", " << target_y << ")" << endl;
         }
       }
-      return false; // if no target found
+      return; // if no target found
     }
   }
 
 };
 
-Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
+Robot ::Robot(const string& filename) : GenericRobot(filename), ScoutRobot(filename) // constructor
 {
   srand((unsigned)time(0)); // make sure the random number generator is seeded
                             // so that the robot can move randomly
 } 
-
 
 
 int main()
@@ -571,7 +703,8 @@ int main()
   int numRobots = robot.getNum_robot();
   robot.set_steps(filename);
   int numSteps = robot.get_steps();
-  robot.set_shells(); // set the shells for each robot
+  robot.set_shells(); 
+  robot.set_lives(filename); // preset all lives = 3
 
   bool gameStart = true;
   int round = 1;
@@ -582,7 +715,15 @@ int main()
     cout << " ---------------- Round " << round  << " -----------------" << endl;
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     {
-        robot.think(filename, robotIndex); 
+
+      cout << "Lives robot " << char('A' + robotIndex) << " : "<< robot.get_live(robotIndex) << endl; // display each robot lives every round
+      robot.think(filename, robotIndex); //4 function execute
+
+      if (robot.check_map() == 1) // if last robot, end game 
+      {
+        cout << "Game Over" << endl;
+        gameStart = false;
+      }
     }
 
     numSteps--; 
