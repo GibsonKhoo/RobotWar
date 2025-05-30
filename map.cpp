@@ -3,6 +3,7 @@
 #include <string>
 #include <ctime>
 #include <vector>
+#include <algorithm>
 
 using namespace std; 
 
@@ -347,10 +348,8 @@ public:
   }
 };
 
-struct Tracker //storing robot position
+struct Tracker // store robot's position
 {
-  int x;
-  int y;
   char name;
 };
 
@@ -394,7 +393,7 @@ public:
 
           if (cell >= 'A' && cell <= 'Z' && cell != ('A' + robotIndex)) //look for robot other than yourself
           {
-            bool enemyTracked = false; //check if enemy tracked
+            bool enemyTracked = false;
             for (const auto& tracked : trackedEnemy)
             {
               if (tracked.name == cell)
@@ -404,12 +403,12 @@ public:
               }
             }
 
-            if (!enemyTracked) //enemy not yet tracked
+            if (!enemyTracked)
             {
-              trackedEnemy.push_back({x, y, cell});
+              trackedEnemy.push_back({cell});
               remainingTracker--;
 
-              cout << "Tracker have been planted on robot " << cell << " at (" << x << ", " << y << ")" << endl;
+              cout << "Tracker planted on robot " << cell << "." << endl;
             }
           }
         }
@@ -422,16 +421,33 @@ public:
 
   void showTrackedEnemy() const
     {
-      cout << "Tracked enemies:" << endl;
-
       if (trackedEnemy.empty())
       {
         cout << "No robots tracked." << endl;
+        return;
       }
 
-      for (const auto& show : trackedEnemy)
+      cout << "Tracked enemies:" << endl;
+      for (const auto& enemy : trackedEnemy)
       {
-        cout << "~ " << show.name << " at (" << show.x << ", " << show.y << ")" << endl;
+        bool found = false;
+        for (int i = 0; i < rows; i++)
+        {
+          for (int j = 0; j < cols; j++)
+          {
+            if (table[i][j] == enemy.name) // find the tracked robot position on the battlefield
+            {
+              cout << "~ Robot " << enemy.name << "is now at (" << i << ", " << j << ")" << endl;
+              found = true;
+            }
+          }
+        }
+
+        if (!found)
+        {
+          cout << "~ Robot " << enemy.name << "is not on the battlefield anymore." << endl;
+        }
+
       }
     }
 };
