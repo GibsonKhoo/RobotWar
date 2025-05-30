@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <ctime>
+#include <vector>
 
 using namespace std; 
 
@@ -346,6 +347,94 @@ public:
   }
 };
 
+struct Tracker //storing robot position
+{
+  int x;
+  int y;
+  char name;
+};
+
+class TrackerRobot : public LookingRobot, public GenericRobot
+{
+private:
+  int remainingTracker = 3;
+  vector<Tracker> trackedEnemy;
+
+public:
+  TrackerRobot(const string& filename) : GenericRobot(filename) {}
+  bool look(int robotIndex) override
+  {
+    if (robotIndex >= size) //check if the robot exist
+    {
+      cout << "Invalid robot index." << endl;
+      return false;
+    }
+
+    if (remainingTracker <= 0)
+    {
+      cout << "No tracker left." << endl;
+      return false;
+    }
+
+    else
+    {
+      cout << "TrackerRobot is using tracker to track the enemies!" << endl;
+
+      int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
+      int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+      for ( int i = 0; i < 8 && remainingTracker > 0; i++)
+      {
+        int x = robotPosX[robotIndex] + dx[i];
+        int y = robotPosY[robotIndex] + dy[i];
+
+        if (x >= 0 && x < getRows() && y >= 0 && y < getCols())
+        {
+          char cell = table[x][y];
+
+          if (cell >= 'A' && cell <= 'Z' && cell != ('A' + robotIndex)) //look for robot other than yourself
+          {
+            bool enemyTracked = false; //check if enemy tracked
+            for (const auto& tracked : trackedEnemy)
+            {
+              if (tracked.name == cell)
+              {
+                enemyTracked = true;
+                break;
+              }
+            }
+
+            if (!enemyTracked) //enemy not yet tracked
+            {
+              trackedEnemy.push_back({x, y, cell});
+              remainingTracker--;
+
+              cout << "Tracker have been planted on robot " << cell << " at (" << x << ", " << y << ")" << endl;
+            }
+          }
+        }
+      }
+
+      return !trackedEnemy.empty();
+
+    }
+  }
+
+  void showTrackedEnemy() const
+    {
+      cout << "Tracked enemies:" << endl;
+
+      if (trackedEnemy.empty())
+      {
+        cout << "No robots tracked." << endl;
+      }
+
+      for (const auto& show : trackedEnemy)
+      {
+        cout << "~ " << show.name << " at (" << show.x << ", " << show.y << ")" << endl;
+      }
+    }
+};
 
 class Robot : public GenericRobot, public ShootingRobot, public MovingRobot, public ThinkingRobot, public LookingRobot// multiple inheritance  
 {
