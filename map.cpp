@@ -122,6 +122,8 @@ class GenericRobot : public Map // initial class for robot
     int * shells;
     int * shellsUsed; 
 
+    bool * hide; 
+
   public:
     void setRobot_num (int s) {
       size = s; 
@@ -149,6 +151,8 @@ class GenericRobot : public Map // initial class for robot
 
     void set_shells (); 
     void respawnRobot(char targetName);
+    
+    void upg_hidebot(int targetIndex);
 };
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
@@ -173,6 +177,7 @@ GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constru
   robotPosY = new int [size]();
   shells = new int[size](); 
   shellsUsed = new int[size](); 
+  hide = new bool[size](); 
 }
 
 GenericRobot :: ~GenericRobot () // destructor
@@ -281,6 +286,14 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
   for (int i = 0; i < size; i++)
   {
     shellsUsed[i] = 0; // each robot has 0 shells used
+  }
+}
+
+void GenericRobot :: upg_hidebot(int targetIndex) // upgrade the hidebot
+{
+  if (hide[targetIndex] = true) //set the robot as a hidebot
+  {
+    cout << "Robot " << char('A' + targetIndex) << " is now a hidebot!" << endl;
   }
 }
 
@@ -514,30 +527,14 @@ public:
 
           if (target_name >= 'A' && target_name <= 'Z')
           {
-            if (target_name != ('A' + robotIndex)) // check if the target is not itself
+            int targetIndex = target_name - 'A';
+            if (targetIndex != robotIndex && !hide[targetIndex]) // check if the target is not itself
             {
-              cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+              cout << "Robot " << char('A' + robotIndex) << " detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
               shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
               return true;
-
             }
           }
-
-          // checking if the looking function is working correctly 
-          // if (target_x == robotPosX[robotIndex] && target_y == robotPosY[robotIndex])
-          // {
-          //   cout << "Own self is at (" << target_x << ", " << target_y << ")." << endl;
-          // }
-
-          // else if (target >= 'A' && target <= 'Z') //robot found
-          // {
-          //   cout << "Enemy is at (" << target_x << ", " << target_y << ")" << endl;
-          // }
-
-          // else
-          // {
-          //   cout << "(" << target_x << ", " << target_y << ") is empty." << endl;
-          // }
         }
         else
         {
@@ -572,6 +569,8 @@ int main()
   robot.set_steps(filename);
   int numSteps = robot.get_steps();
   robot.set_shells(); // set the shells for each robot
+
+  robot.upg_hidebot(1); // upgrade the robot b to hidebot
 
   bool gameStart = true;
   int round = 1;
