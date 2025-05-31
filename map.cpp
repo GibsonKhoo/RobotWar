@@ -7,6 +7,8 @@
 
 using namespace std; 
 
+ofstream output("result.txt", ios::app); //storing output in result.txt file
+                                         //ios::app is to add new output after existing output
 class Map 
 {
   protected: 
@@ -62,7 +64,8 @@ Map ::Map(const string& filename) // get the map size // constructor
 
 Map :: ~Map () // destructor
 {
-  cout << "Destroying map..." << endl;
+  printOutput("Destroying map...");
+  // cout << "Destroying map..." << endl;
   destroy_map(); // deallocate the memory
 }
 
@@ -99,11 +102,14 @@ void Map :: display_map() const // display the map
 {
   for (int i =0; i < rows; i++)
   { 
+    string displayMap;
     for (int j = 0; j < cols; j++)
     {
-      cout << table [i][j] << " "; 
+      displayMap += string(1, table[i][j]) + " ";
+      // cout << table [i][j] << " "; 
     }
-    cout << endl;
+    printOutput(displayMap + "\n");
+    // cout << endl;
   }
 }
 
@@ -476,13 +482,16 @@ public:
 
     if (targetX < 0 || targetX >= rows || targetY < 0 || targetY >= cols) // check if surrounding got robot onot
     {
-        cout << "Target out of bounds. Fire action aborted." << endl;
+        printOutput("Target out of bounds. Fire action aborted.");
+        // cout << "Target out of bounds. Fire action aborted." << endl;
     }
     else 
     {
       if (hitChance < 70)
       {
-          cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
+          printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) + ", " + to_string(targetY) 
+                      + " and hits " + string(1, targetName) + "!");
+          // cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
           if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
           {
               respawnRobot(targetName); // shoot and target respawn 
@@ -490,20 +499,23 @@ public:
       }
       else
       {
-          cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and misses." << endl;
+        printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) + ", " + to_string(targetY) + ") and misses.");
+        // cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and misses." << endl;
       }
 
       shells[robotIndex]--;
       shellsUsed[robotIndex]++;
 
-      cout << "Bullets used: " << shellsUsed[robotIndex] << ", Bullets left: " << shells[robotIndex] << endl; 
+      printOutput("Bullets used: " + to_string(shellsUsed[robotIndex]) + ", Bullets left: " + to_string(shells[robotIndex]));
+      // cout << "Bullets used: " << shellsUsed[robotIndex] << ", Bullets left: " << shells[robotIndex] << endl; 
     }
 
     for (int i =0; i < size; i++) // for all robots, check if the robot has shells left
     {
         if (shells[i] <= 0)
         {
-            cout << "Robot " << char('A' + i) << " has no shells left and self-destructs!" << endl;
+            printOutput("Robot " + string(1, char('A' + i)) + " has no shells left and self-destructs!");
+            // cout << "Robot " << char('A' + i) << " has no shells left and self-destructs!" << endl;
             self_destruct(i); // self destruct the robot
             return; 
         }   
@@ -524,7 +536,8 @@ public:
 
     else
     {
-      cout << "Robot " << char ('A' + robotIndex) <<" found no nearby targets to fire at." << endl;
+      printOutput("Robot " + string(1, char('A' + robotIndex)) + " found no nearby targets to fire at.");
+      // cout << "Robot " << char ('A' + robotIndex) <<" found no nearby targets to fire at." << endl;
       move(filename, robotIndex); 
     }
 
@@ -558,22 +571,28 @@ public:
     {
       if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex]) // check if the robot is not moving
       {
-        cout << "Robot '" << char ('A' + robotIndex) << "' stays at (" 
-              << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ")" << endl;
+        printOutput("Robot " + string(1, char('A' + robotIndex)) + " stays at (" + to_string(robotPosX[robotIndex]) 
+                    + ", " + to_string(robotPosY[robotIndex]) + ")");
+        // cout << "Robot '" << char ('A' + robotIndex) << "' stays at (" 
+              // << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ")" << endl;
       }
       else 
       {
         if (table[newX][newY] != '.') // check if the new position is not empty
         {
-          cout << "Robot '" << char ('A' + robotIndex) << "' cannot move to (" 
-                << newX << "," << newY << ") as it is occupied." << endl;
+          printOutput("Robot " + string(1, char('A' + robotIndex)) + " cannot move to (" + to_string(newX) 
+                      + ", " + to_string(newY) + ") as it is occupied.");
+          // cout << "Robot '" << char ('A' + robotIndex) << "' cannot move to (" 
+                // << newX << "," << newY << ") as it is occupied." << endl;
           return; // cannot move to occupied position
         }
         else 
         {
-          cout << "Robot '" << char ('A' + robotIndex) << "' moves from (" 
-                << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ") to (" 
-                << newX << "," << newY << ")" << endl;
+          printOutput("Robot " + string(1, char('A' + robotIndex)) + " moves from (" + to_string(robotPosX[robotIndex]) 
+                      + ", " + to_string(robotPosY[robotIndex]) + ") to (" + to_string(newX) + ", " + to_string(newY) + ")");
+          // cout << "Robot '" << char ('A' + robotIndex) << "' moves from (" 
+          //      << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ") to (" 
+          //      << newX << "," << newY << ")" << endl;
           robotPosX[robotIndex] = newX;
           robotPosY[robotIndex] = newY;
         }
@@ -588,7 +607,8 @@ public:
         table[robotPosX[i]][robotPosY[i]] = char ('A' + i);
     }
     display_map();
-    cout << endl;
+    printOutput("\n");
+    // cout << endl;
        
   }
   
@@ -600,13 +620,15 @@ public:
 
     if (robotIndex >= size) //check if the robot exist
     {
-      cout << "Invalid robot index." << endl;
+      printOutput("Invalid robot index.");
+      // cout << "Invalid robot index." << endl;
       return false;
     }
 
     else 
     {
-      cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
+      printOutput("Robot " + string(1, char('A' + robotIndex)) + " looks around at area (" + to_string(robotPosX[robotIndex]) + ", " + to_string(robotPosY[robotIndex]) + ")");
+      // cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
 
       for (int d = 0; d < 8; d++) // check all 8 directions
       {
@@ -621,7 +643,8 @@ public:
           {
             if (target_name != ('A' + robotIndex)) // check if the target is not itself
             {
-              cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+              printOutput("Robot A detects robot " + string(1, target_name) + " at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
+              // cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
               shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
               return true;
 
@@ -646,7 +669,8 @@ public:
         }
         else
         {
-          cout << "Out of battlefield at (" << target_x << ", " << target_y << ")" << endl;
+          printOutput("Out of battlefield at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
+          // cout << "Out of battlefield at (" << target_x << ", " << target_y << ")" << endl;
         }
       }
       return false; // if no target found
@@ -661,7 +685,11 @@ Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
                             // so that the robot can move randomly
 } 
 
-
+void printOutput(const string& result) //for displaying output in terminal and save in txt file at the same time
+{
+  cout << result << endl;
+  output << result << endl;
+}
 
 int main()
 {
@@ -683,8 +711,8 @@ int main()
   
   while (gameStart && numSteps > 0) // game starts and steps are available
   {
-    
-    cout << " ---------------- Round " << round  << " -----------------" << endl;
+    printOutput("---------------- Round " + to_string(round) + "-----------------");
+    // cout << " ---------------- Round " << round  << " -----------------" << endl;
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     {
         robot.think(filename, robotIndex); 
