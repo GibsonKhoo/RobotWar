@@ -7,8 +7,14 @@
 
 using namespace std; 
 
-ofstream output("result.txt", ios::app); //storing output in result.txt file
-                                         //ios::app is to add new output after existing output
+ofstream output("result.txt"); //storing output in result.txt file
+
+void printOutput(const string& result) //for displaying output in terminal and save in txt file at the same time
+{
+  cout << result << "\n";
+  output << result << "\n";
+}
+
 class Map 
 {
   protected: 
@@ -105,10 +111,10 @@ void Map :: display_map() const // display the map
     string displayMap;
     for (int j = 0; j < cols; j++)
     {
-      displayMap += string(1, table[i][j]) + " ";
+      displayMap += string(1, table[i][j]) + " "; // add table and blank space to displayMap
       // cout << table [i][j] << " "; 
     }
-    printOutput(displayMap + "\n");
+    printOutput(displayMap);
     // cout << endl;
   }
 }
@@ -217,7 +223,8 @@ void GenericRobot ::get_robotPos(const string& filename) // get the robot positi
 
       else // random 
       {
-        cout << "Error: Robot position not found" << endl;
+        printOutput("Error: Robot position not found");
+        // cout << "Error: Robot position not found" << endl;
       }
     }
   }
@@ -276,7 +283,8 @@ void GenericRobot :: respawnRobot (char targetName)
       robotPosX[targetIndex] = newX;
       robotPosY[targetIndex] = newY;
 
-      cout << "Robot " << char ('A' + targetIndex) << " respawned at (" << newX << "," << newY << ")" << endl;
+      printOutput("Robot " + string(1, char('A' + targetIndex)) + " respawned at (" + to_string(newX) + ", " + to_string(newY) + ")");
+      // cout << "Robot " << char ('A' + targetIndex) << " respawned at (" << newX << "," << newY << ")" << endl;
 }
 
 void GenericRobot :: set_shells() // set the shells and used shells for each robot
@@ -328,13 +336,15 @@ public:
   {
     if (remainingScout <= 0)
     {
-      cout << "No scouts left." << endl;
+      printOutput("No scouts left.");
+      // cout << "No scouts left." << endl;
       return false;
     }
 
     else
     {
-      cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
+      printOutput("ScoutRobot is using scout to scan the battlefield!");
+      // cout << "ScoutRobot is using scout to scan the battlefield!" << endl;
       remainingScout--;
 
       for (int i = 0; i < getRows(); i++)
@@ -345,7 +355,8 @@ public:
 
           if (enemy >= 'A' && enemy <= 'Z')
           {
-            cout << "Enemy is at (" << i << ", " << j << ")" << endl; // display all the enemy pos
+            printOutput("Enemy is at (" + to_string(i) + ", " + to_string(j) + ")");
+            // cout << "Enemy is at (" << i << ", " << j << ")" << endl; // display all the enemy pos
           }
         }
       }
@@ -371,19 +382,22 @@ public:
   {
     if (robotIndex >= size) //check if the robot exist
     {
-      cout << "Invalid robot index." << endl;
+      printOutput("Invalid robot index.");
+      // cout << "Invalid robot index." << endl;
       return false;
     }
 
     if (remainingTracker <= 0)
     {
-      cout << "No tracker left." << endl;
+      printOutput("No tracker left.");
+      // cout << "No tracker left." << endl;
       return false;
     }
 
     else
     {
-      cout << "TrackerRobot is using tracker to track the enemies!" << endl;
+      printOutput("TrackerRobot is using tracker to track the enemies!");
+      // cout << "TrackerRobot is using tracker to track the enemies!" << endl;
 
       int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
       int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
@@ -429,11 +443,13 @@ public:
     {
       if (trackedEnemy.empty())
       {
-        cout << "No robots tracked." << endl;
+        printOutput("No robots tracked.");
+        // cout << "No robots tracked." << endl;
         return;
       }
 
-      cout << "Tracked enemies:" << endl;
+      printOutput("Tracked enemies: ");
+      // cout << "Tracked enemies:" << endl;
       for (const auto& enemy : trackedEnemy)
       {
         bool found = false;
@@ -443,7 +459,8 @@ public:
           {
             if (table[i][j] == enemy.name) // find the tracked robot position on the battlefield
             {
-              cout << "~ Robot " << enemy.name << "is now at (" << i << ", " << j << ")" << endl;
+              printOutput("~ Robot " + string(1, enemy.name) + " is now at (" + to_string(i) + ", " + to_string(j) + ")");
+              // cout << "~ Robot " << enemy.name << " is now at (" << i << ", " << j << ")" << endl;
               found = true;
             }
           }
@@ -451,7 +468,8 @@ public:
 
         if (!found)
         {
-          cout << "~ Robot " << enemy.name << "is not on the battlefield anymore." << endl;
+          printOutput("~ Robot " + string(1, enemy.name) + " is not on the battlefield anymore.");
+          // cout << "~ Robot " << enemy.name << " is not on the battlefield anymore." << endl;
         }
 
       }
@@ -476,7 +494,8 @@ public:
 
     if (dx == 0 && dy == 0) // cannot suicide 
     {
-        cout << "Robot " << char('A' + robotIndex) << " tried to fire at itself! Not allowed." << endl;
+        printOutput("Robot " + string(1, char('A' + robotIndex)) + " tried to fire at itself! Not allowed.");
+        // cout << "Robot " << char('A' + robotIndex) << " tried to fire at itself! Not allowed." << endl;
         return;
     }
 
@@ -490,7 +509,7 @@ public:
       if (hitChance < 70)
       {
           printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) + ", " + to_string(targetY) 
-                      + " and hits " + string(1, targetName) + "!");
+                      + ") and hits " + string(1, targetName) + "!");
           // cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
           if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
           {
@@ -685,11 +704,6 @@ Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
                             // so that the robot can move randomly
 } 
 
-void printOutput(const string& result) //for displaying output in terminal and save in txt file at the same time
-{
-  cout << result << endl;
-  output << result << endl;
-}
 
 int main()
 {
@@ -728,5 +742,7 @@ int main()
   }
 
   robot.destroy_map(); // deallocate the memory for the robot map
+
+  output.close();
   return 0; 
 }
