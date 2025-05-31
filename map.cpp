@@ -123,6 +123,7 @@ class GenericRobot : public Map // initial class for robot
     int * shellsUsed; 
 
     bool * hide; 
+    int * jump;
 
   public:
     void setRobot_num (int s) {
@@ -153,6 +154,7 @@ class GenericRobot : public Map // initial class for robot
     void respawnRobot(char targetName);
     
     void upg_hidebot(int targetIndex);
+    void upg_jumpbot(int robotIndex);
 };
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
@@ -178,6 +180,7 @@ GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constru
   shells = new int[size](); 
   shellsUsed = new int[size](); 
   hide = new bool[size](); 
+  jump = new int [size](); 
 }
 
 GenericRobot :: ~GenericRobot () // destructor
@@ -186,6 +189,8 @@ GenericRobot :: ~GenericRobot () // destructor
   delete [] robotPosY; 
   delete [] shells; 
   delete [] shellsUsed; 
+  delete [] hide;
+  delete [] jump; 
 }
 
 void GenericRobot ::get_robotPos(const string& filename) // get the robot position
@@ -295,6 +300,23 @@ void GenericRobot :: upg_hidebot(int targetIndex) // upgrade the hidebot
   {
     cout << "Robot " << char('A' + targetIndex) << " is now a hidebot!" << endl;
   }
+}
+
+void GenericRobot :: upg_jumpbot(int robotIndex) // upgrade the robot so it can jump anywhere
+{
+  for (int i = 0; i < size ; ++i)
+    jump[i] = 1;
+
+  int newX, newY;
+  do {
+      newX = rand() % rows; 
+      newY = rand() % cols;
+  } while (table[newX][newY] != '.');
+
+  table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.'; // remove from old position
+  robotPosX[robotIndex] = newX; // update the robot position
+  robotPosY[robotIndex] = newY; // update the robot position
+  cout << "Robot " << char('A' + robotIndex) << " jumped to (" << newX << "," << newY << ")" << endl;
 }
 
 class ShootingRobot
@@ -571,6 +593,7 @@ int main()
   robot.set_shells(); // set the shells for each robot
 
   robot.upg_hidebot(1); // upgrade the robot b to hidebot
+  
 
   bool gameStart = true;
   int round = 1;
@@ -579,6 +602,7 @@ int main()
   {
     
     cout << " ---------------- Round " << round  << " -----------------" << endl;
+    robot.upg_jumpbot(1); // upgrade the robot a to jumpbot
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     {
         robot.think(filename, robotIndex); 
