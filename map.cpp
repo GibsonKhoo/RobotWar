@@ -662,7 +662,7 @@ public:
           {
             if (target_name != ('A' + robotIndex)) // check if the target is not itself
             {
-              printOutput("Robot A detects robot " + string(1, target_name) + " at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
+              printOutput("Robot " + string(1, char('A' + robotIndex)) + " detects robot " + string(1, target_name) + " at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
               // cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
               shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
               return true;

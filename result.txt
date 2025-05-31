@@ -7,103 +7,104 @@
 Robot A looks around at area (3, 6)
 Robot A detects robot B at (2, 5)
 Robot A fires at (2, 5) and hits B!
-Robot B respawned at (2, 1)
+Robot B respawned at (3, 2)
 Bullets used: 1, Bullets left: 9
-Robot A moves from (3, 6) to (2, 7)
+Robot A moves from (3, 6) to (3, 5)
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ B . . . . . A . + 
 + . . . . . . . . + 
++ . B . . A . . . + 
 + + + + + + + + + + 
 
 
-Robot B looks around at area (2, 1)
+Robot B looks around at area (3, 2)
 Robot B found no nearby targets to fire at.
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ B . . . . . A . + 
 + . . . . . . . . + 
++ . B . . A . . . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 2-----------------
-Robot A looks around at area (2, 7)
+Robot A looks around at area (3, 5)
 Robot A found no nearby targets to fire at.
-Robot A moves from (2, 7) to (2, 6)
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ B . . . . A . . + 
 + . . . . . . . . + 
++ . B . . A . . . + 
 + + + + + + + + + + 
 
 
-Robot B looks around at area (2, 1)
+Robot B looks around at area (3, 2)
 Robot B found no nearby targets to fire at.
-Robot B stays at (2, 1)
+Robot B moves from (3, 2) to (2, 1)
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ B . . . . A . . + 
-+ . . . . . . . . + 
++ B . . . . . . . + 
++ . . . . A . . . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 3-----------------
-Robot A looks around at area (2, 6)
+Robot A looks around at area (3, 5)
 Robot A found no nearby targets to fire at.
-Robot A moves from (2, 6) to (1, 5)
 + + + + + + + + + + 
-+ . . . . A . . . + 
-+ B . . . . . . . + 
 + . . . . . . . . + 
++ B . . . . . . . + 
++ . . . . A . . . + 
 + + + + + + + + + + 
 
 
 Robot B looks around at area (2, 1)
 Robot B found no nearby targets to fire at.
-Robot B stays at (2, 1)
+Robot B moves from (2, 1) to (2, 2)
 + + + + + + + + + + 
-+ . . . . A . . . + 
-+ B . . . . . . . + 
 + . . . . . . . . + 
++ . B . . . . . . + 
++ . . . . A . . . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 4-----------------
-Robot A looks around at area (1, 5)
+Robot A looks around at area (3, 5)
 Robot A found no nearby targets to fire at.
-Robot A moves from (1, 5) to (1, 6)
+Robot A moves from (3, 5) to (2, 5)
 + + + + + + + + + + 
-+ . . . . . A . . + 
-+ B . . . . . . . + 
++ . . . . . . . . + 
++ . B . . A . . . + 
 + . . . . . . . . + 
 + + + + + + + + + + 
 
 
-Robot B looks around at area (2, 1)
+Robot B looks around at area (2, 2)
 Robot B found no nearby targets to fire at.
+Robot B moves from (2, 2) to (2, 3)
 + + + + + + + + + + 
-+ . . . . . A . . + 
-+ B . . . . . . . + 
++ . . . . . . . . + 
++ . . B . A . . . + 
 + . . . . . . . . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 5-----------------
-Robot A looks around at area (1, 6)
+Robot A looks around at area (2, 5)
 Robot A found no nearby targets to fire at.
+Robot A moves from (2, 5) to (3, 5)
 + + + + + + + + + + 
-+ . . . . . A . . + 
-+ B . . . . . . . + 
 + . . . . . . . . + 
++ . . B . . . . . + 
++ . . . . A . . . + 
 + + + + + + + + + + 
 
 
-Robot B looks around at area (2, 1)
+Robot B looks around at area (2, 3)
 Robot B found no nearby targets to fire at.
+Robot B stays at (2, 3)
 + + + + + + + + + + 
-+ . . . . . A . . + 
-+ B . . . . . . . + 
 + . . . . . . . . + 
++ . . B . . . . . + 
++ . . . . A . . . + 
 + + + + + + + + + + 
 
 
