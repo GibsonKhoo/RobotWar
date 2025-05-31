@@ -304,19 +304,22 @@ void GenericRobot :: upg_hidebot(int targetIndex) // upgrade the hidebot
 
 void GenericRobot :: upg_jumpbot(int robotIndex) // upgrade the robot so it can jump anywhere
 {
-  for (int i = 0; i < size ; ++i)
-    jump[i] = 1;
-
+  if (jump[robotIndex] = true){
   int newX, newY;
   do {
       newX = rand() % rows; 
       newY = rand() % cols;
   } while (table[newX][newY] != '.');
 
+
   table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.'; // remove from old position
   robotPosX[robotIndex] = newX; // update the robot position
   robotPosY[robotIndex] = newY; // update the robot position
+
+  table[newX][newY] = char('A' + robotIndex); // assign the new position to the robot
+
   cout << "Robot " << char('A' + robotIndex) << " jumped to (" << newX << "," << newY << ")" << endl;
+  }
 }
 
 class ShootingRobot
@@ -566,7 +569,6 @@ public:
       return false; // if no target found
     }
   }
-
 };
 
 Robot ::Robot(const string& filename) : GenericRobot(filename) // constructor
@@ -592,8 +594,8 @@ int main()
   int numSteps = robot.get_steps();
   robot.set_shells(); // set the shells for each robot
 
-  robot.upg_hidebot(1); // upgrade the robot b to hidebot
-  
+  //robot.upg_hidebot(1); // upgrade the robot b to hidebot
+  robot.upg_jumpbot(1); // upgrade the robot b to jumpbot
 
   bool gameStart = true;
   int round = 1;
@@ -602,7 +604,7 @@ int main()
   {
     
     cout << " ---------------- Round " << round  << " -----------------" << endl;
-    robot.upg_jumpbot(1); // upgrade the robot a to jumpbot
+    
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     {
         robot.think(filename, robotIndex); 
