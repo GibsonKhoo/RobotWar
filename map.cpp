@@ -309,10 +309,10 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
   }
 }
 
-void GenericRobot :: upg_hidebot(int targetIndex) // upgrade the hidebot
+void GenericRobot :: upg_hidebot(int target_name) // upgrade the hidebot
 {
-  hide[targetIndex] = true;
-  hideleft[targetIndex] = 3; 
+  hide[target_name] = true;
+  hideleft[target_name] = 3; 
 }
 
 void GenericRobot :: upg_jumpbot(int robotIndex) // upgrade the robot so it can jump anywhere
@@ -458,11 +458,7 @@ public:
     }
     else 
     { 
-      if (hide[targetName])
-      {
-          cout << "Robot " << targetName << " is hiding and cannot be hit!" << endl;
-      }
-      else if (hitChance < 70)
+     if (hitChance < 70)
       {
           cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
           if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
@@ -516,22 +512,42 @@ public:
 
   void move(const string& filename, int robotIndex) override 
   {  
+    if (jump[robotIndex]) {
+      jumpleft[robotIndex]--;
+      if (jumpleft[robotIndex] <= 0) {
+        jump[robotIndex] = false;
+        upg[robotIndex] = false;
+        kills[robotIndex] = false;
+        cout << "Robot " << char('A' + robotIndex) << "'s jump upgrade expired." << endl;
+        }
+      }
+
+    if (hide[robotIndex]) {
+        hideleft[robotIndex]--;
+        if (hideleft[robotIndex] <= 0) {
+            hide[robotIndex] = false;
+            upg[robotIndex] = false;
+            kills[robotIndex] = false;
+            cout << "Robot " << char('A' + robotIndex) << "'s hide upgrade expired." << endl;
+        }
+    }
+
     if (kills[robotIndex] && !upg[robotIndex]){ // if the robot has killed any other robots
       int type = rand() % 2; // randomly choose to upgrade hide or jump
-/*      if (type == 0) // upgrade 
+      if (type == 0) // upgrade 
       {
-        jump[robotIndex] = true; // set jump mode
-        jumpleft[robotIndex] = 3; 
+        jump[robotIndex] = true; // upgrade to jump mode
+        jumpleft[robotIndex] = 3; // set the jump left to 3
         cout << "Robot " << char ('A' + robotIndex) << " upgraded to jump mode." << endl;
-      }*/
-      if (type == 0) // upgrade to hide
+      }
+      else  // upgrade to hide
       {
-        upg_hidebot(robotIndex);
+        upg_hidebot(robotIndex); // upgrade to hide mode
         cout << "Robot " << char ('A' + robotIndex) << " upgraded to hide mode." << endl;
       }
       upg[robotIndex] = true; // mark the robot as upgraded
     }
-
+    else {
     // Remove from current position
     table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.';
 
@@ -570,7 +586,7 @@ public:
         }
         else 
         {
-          cout << "Robot '" << char ('A' + robotIndex) << "' moves from (" 
+          cout << "Robot " << char ('A' + robotIndex) << " moves from (" 
                 << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ") to (" 
                 << newX << "," << newY << ")" << endl;
           robotPosX[robotIndex] = newX;
@@ -579,7 +595,8 @@ public:
         
       }
       
-    
+    }
+  }
 
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
@@ -588,8 +605,9 @@ public:
     }
     display_map();
     cout << endl;
+ 
   }
-  }
+  
   
   bool look(int robotIndex) override
   {
@@ -617,13 +635,17 @@ public:
           char target_name = table[target_x][target_y];
 
           if (target_name >= 'A' && target_name <= 'Z')
-          {
-            if (target_name != robotIndex ) // check if the target is not itself
-            {
-              cout << "Robot " << char('A' + robotIndex) << " detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
-              shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
-              return true;
-            }
+          {              
+            if (upg[target_name - 'A'] && hide[target_name - 'A']) // check if the target robot is upgraded and hidden
+              {
+                continue; // cannot see the target robot
+              }
+                if (target_name != robotIndex) // check if the target is not itself
+                {
+                  cout << "Robot " << char('A' + robotIndex) << " detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+                  shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
+                  return true;
+                }
           }
         }
         else
