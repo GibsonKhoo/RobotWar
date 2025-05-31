@@ -514,23 +514,17 @@ public:
   {  
     if (jump[robotIndex]) {
       jumpleft[robotIndex]--;
-      if (jumpleft[robotIndex] <= 0) {
-        jump[robotIndex] = false;
-        upg[robotIndex] = false;
-        kills[robotIndex] = false;
-        cout << "Robot " << char('A' + robotIndex) << "'s jump upgrade expired." << endl;
+        if (jumpleft[robotIndex] == 0) {
+          cout << "Robot " << char('A' + robotIndex) << " jump upgrade expired." << endl;
         }
       }
 
     if (hide[robotIndex]) {
-        hideleft[robotIndex]--;
-        if (hideleft[robotIndex] <= 0) {
-            hide[robotIndex] = false;
-            upg[robotIndex] = false;
-            kills[robotIndex] = false;
-            cout << "Robot " << char('A' + robotIndex) << "'s hide upgrade expired." << endl;
-        }
-    }
+      hideleft[robotIndex]--;
+        if (hideleft[robotIndex] == 0) {
+          cout << "Robot " << char('A' + robotIndex) << " hide upgrade expired." << endl;
+       }
+      }
 
     if (kills[robotIndex] && !upg[robotIndex]){ // if the robot has killed any other robots
       int type = rand() % 2; // randomly choose to upgrade hide or jump
@@ -539,6 +533,7 @@ public:
         jump[robotIndex] = true; // upgrade to jump mode
         jumpleft[robotIndex] = 3; // set the jump left to 3
         cout << "Robot " << char ('A' + robotIndex) << " upgraded to jump mode." << endl;
+        upg_jumpbot(robotIndex); 
       }
       else  // upgrade to hide
       {
@@ -596,7 +591,7 @@ public:
       }
       
     }
-  }
+  
 
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
@@ -605,7 +600,7 @@ public:
     }
     display_map();
     cout << endl;
- 
+  }
   }
   
   
