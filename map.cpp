@@ -119,8 +119,6 @@ void Map :: display_map() const // display the map
 }
 
 
-
-
 class GenericRobot : public Map // initial class for robot
 {
   protected:  
@@ -137,7 +135,6 @@ class GenericRobot : public Map // initial class for robot
     int * shellsUsed; 
 
     int * kill;
-
     int * lives;
 
     int * lookUpgradeType; // check which one the robot upgraded to 
@@ -170,6 +167,7 @@ class GenericRobot : public Map // initial class for robot
     void self_destruct(int robotIndex);
 
     void set_shells (); 
+    virtual void set_shells(int robotIndex);
 
     void respawnRobot(char targetName);
 
@@ -332,7 +330,7 @@ void GenericRobot :: respawnRobot (char targetName)
 
 void GenericRobot :: set_shells() // set the shells and used shells for each robot
 {
-  for (int i = 0; i < size; i++)
+  for (int i =0; i < size; i++)
   {
     shells[i] = 10; // each robot has 10 shells
   }
@@ -341,6 +339,15 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
   {
     shellsUsed[i] = 0; // each robot has 0 shells used
   }
+}
+
+void GenericRobot::set_shells(int robotIndex)
+{
+  for (int robotIndex; robotIndex < size; robotIndex++)
+  {
+    shells[robotIndex] = 10; // each robot has 10 shells
+  }
+
 }
 
 void GenericRobot :: set_kill() // set the kill count for each robot
@@ -396,7 +403,7 @@ int GenericRobot :: check_map()
 class ShootingRobot : virtual public GenericRobot 
 {
 public:  
-  virtual void shoot(int robotIndex, int dx, int dy, char targetName) = 0; // pure virtual function for shooting
+  virtual void shoot(int robotIndex, int dx, int dy, char targetName, bool fromUpgrade = false) = 0; // pure virtual function for shooting
 };
 
 class MovingRobot : virtual public GenericRobot
@@ -414,7 +421,7 @@ public:
 class LookingRobot : virtual public GenericRobot
 {
 public:
-  virtual void look(int robotIndex) = 0; // pure virtual function for looking around
+  virtual void look(int robotIndex, bool fromUpgrade = false) = 0; // pure virtual function for looking around
 };
 
 class ScoutRobot : public LookingRobot
@@ -425,7 +432,7 @@ private:
 public: 
   ScoutRobot(const string& filename): GenericRobot(filename), remainingScout(3) {} // default constructor
 
-  void look(int robotIndex) override
+  void look(int robotIndex, bool fromUpgrade = true) override
   {   
     if (remainingScout <= 0)
     {
@@ -470,7 +477,7 @@ private:
 public:
   TrackerRobot(const string& filename) : GenericRobot(filename), remainingTracker(3) {} //constructor
   
-  void look(int robotIndex) override
+  void look(int robotIndex, bool fromUpgrade = true) override
   {
     if (robotIndex >= size) //check if the robot exist
     {
@@ -570,13 +577,217 @@ public:
     }
 };
 
-class Robot : public ShootingRobot, public MovingRobot, public ThinkingRobot, public ScoutRobot, public TrackerRobot// multiple inheritance  
+class LongShotRobot : public LookingRobot, public ShootingRobot
+{
+  public:
+  LongShotRobot(const string& filename): GenericRobot(filename){} // default constructor
+
+  void look (int robotIndex, bool fromUpgrade = true) override
+  {
+
+    if (robotIndex >= size) //check if the robot exist
+    {
+      printOutput("Invalid robot index.");
+      // cout << "Invalid robot index." << endl;
+      return ;
+    }
+
+    else 
+    {
+      //printOutput("Robot " + string(1, char('A' + robotIndex)) + " looks around at area (" + to_string(robotPosX[robotIndex]) + ", " + to_string(robotPosY[robotIndex]) + ")");
+      // cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
+      
+      for (int dx = -3; dx <= 3; ++dx) // make a 7x7 array, scan area increase 
+      {
+        for (int dy = -3; dy <= 3; ++dy) 
+        {
+          if (abs(dx) + abs(dy) > 3 || !(dx == 0 && dy == 0)) // whithin the range but not myself
+          {
+            
+              int target_x = robotPosX[robotIndex] + dx; // target robot position x
+              int target_y = robotPosY[robotIndex] + dy;  // target robot position y
+
+              if (target_x >= 0 && target_x < rows && target_y >= 0 && target_y < cols) 
+              {
+                char target_name = table[target_x][target_y];
+
+                if (target_name >= 'A' && target_name <= 'Z')
+                {
+                  if (target_name != ('A' + robotIndex)) // check if the target is not itself
+                  {
+                    //printOutput("Robot A detects robot " + string(1, target_name) + " at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
+                    // cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+                    shoot(robotIndex, dx, dy, target_name); // fire at the target robot
+                    return;
+
+                  }
+                }
+              }
+              
+            
+            return; // if no target found
+          }
+        }
+      }
+    }
+  }
+};
+
+class ThirtyShotsRobot : public ShootingRobot
+{
+  public: 
+  ThirtyShotsRobot(const string& filename): GenericRobot(filename){} // default constructor
+
+  void set_shells(int robotIndex) override
+  {
+      shells[robotIndex] = 30; // Give 30 shells to this robot
+      printOutput("~ Robot " + string(1, char('A' + robotIndex)) + " now has 30 shells!");
+  } 
+};
+
+class SemiAutoRobot : public LookingRobot, public ShootingRobot
+{
+  public: 
+  SemiAutoRobot(const string& filename): GenericRobot(filename){} // default constructor
+  
+  void look (int robotIndex, bool fromUpgrade) override
+  {
+
+    if (robotIndex >= size) //check if the robot exist
+    {
+      printOutput("Invalid robot index.");
+      // cout << "Invalid robot index." << endl;
+      return ;
+    }
+
+    else 
+    {
+      int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1}; //left, up-left, up, down-right, right, down, down-left, up-right
+      int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+      if (robotIndex >= size) //check if the robot exist
+      {
+        printOutput("Invalid robot index.");
+        // cout << "Invalid robot index." << endl;
+        return ;
+      }
+
+      else 
+      {
+        //printOutput("Robot " + string(1, char('A' + robotIndex)) + " looks around at area (" + to_string(robotPosX[robotIndex]) + ", " + to_string(robotPosY[robotIndex]) + ")");
+        // cout << "Robot " << char('A' + robotIndex) << " looks around at area (" << robotPosX[robotIndex] << ", " << robotPosY[robotIndex]  << ")" << endl;
+
+        for (int d = 0; d < 8; d++) // check all 8 directions
+        {
+          int target_x = robotPosX[robotIndex] + dx[d]; // target robot position x
+          int target_y = robotPosY[robotIndex] + dy[d];  // target robot position y
+
+          if (target_x >= 0 && target_x < rows && target_y >= 0 && target_y < cols) 
+          {
+            char target_name = table[target_x][target_y];
+
+            if (target_name >= 'A' && target_name <= 'Z' && target_name != ('A' + robotIndex))
+            {
+                //printOutput("Robot A detects robot " + string(1, target_name) + " at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
+                // cout << "Robot A detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+                
+                int shots = fromUpgrade ? 3 : 1; // 3 shots if upgraded(true), 1 otherwise (false)
+                for (int i =0; i <size; i++)
+                {
+                  shoot(robotIndex, dx[d], dy[d], target_name, true); // fire at the target robot
+                  cout << endl;
+                }
+                return;
+
+            }
+          }
+          else
+          {
+            printOutput("Out of battlefield at (" + to_string(target_x) + ", " + to_string(target_y) + ")");
+            // cout << "Out of battlefield at (" << target_x << ", " << target_y << ")" << endl;
+          }
+        }
+        return; // if no target found
+      }
+    }
+  }
+};
+
+class Robot : public MovingRobot, 
+              public ThinkingRobot, 
+              public ScoutRobot, 
+              public TrackerRobot, 
+              public LongShotRobot, 
+              public ThirtyShotsRobot, 
+              public SemiAutoRobot// multiple inheritance  
 {
 public:
   Robot(const string& filename); // constructor
 
-  void shoot(int robotIndex, int dx, int dy, char targetName) override 
+  void shoot(int robotIndex, int dx, int dy, char targetName, bool fromUpgrade = false) override 
   {
+    if (kill[robotIndex] == 3 && shootUpgradeType[robotIndex] == 0) 
+    {
+      int type = rand() % 3; // random upgrade //0 , 1 , 2
+      bool upgradeTaken = false;
+      
+
+      for (int i = 0; i < size; i++) // Check if any other robot already has this upgrade
+      {
+        if (i != robotIndex && shootUpgradeType[i] == type + 1) // type+1: 1=longshot, 2=semiauto, thirtyshot
+        {
+          upgradeTaken = true;
+          break;
+        }
+      }
+      
+      if (!upgradeTaken) 
+      {
+      switch (type)
+      {
+        case 0: 
+            shootUpgradeType[robotIndex] = 1;
+            cout << "~ Robot " << char('A'+ robotIndex) << " upgraded to LongShotBot" << endl;
+            break;
+
+        case 1: 
+            shootUpgradeType[robotIndex] = 2;  
+            cout << "~ Robot " << char('A'+ robotIndex) << " upgraded to SemiAutoBot" << endl; 
+            break;
+        case 2:
+            shootUpgradeType[robotIndex] = 3;  
+            cout << "~ Robot " << char('A'+ robotIndex) << " upgraded to ThirtyShotBot" << endl; 
+            break;
+      }
+    
+      }
+      else 
+      {
+        cout << "Upgrade already taken by another robot. No upgrade applied." << endl;
+      }
+    }
+
+    if (!fromUpgrade)
+    {
+      if (shootUpgradeType[robotIndex] == 1) //long shot
+      {
+  
+        LongShotRobot:: look(robotIndex);  
+        cout << "LongShot function" << endl;
+      }
+      else if (shootUpgradeType[robotIndex] == 2) // semiauto
+      {
+        SemiAutoRobot::look(robotIndex, true);
+        cout << "SemiAuto function" << endl;
+      }
+      else if (shootUpgradeType[robotIndex] == 3) // thirtyshot
+      {
+        ThirtyShotsRobot::set_shells(robotIndex);
+        cout << "ThirtyShotBot function" << endl;
+      }
+    }
+    
+
     int currentX = robotPosX[robotIndex]; // get the current position of the robot
     int currentY = robotPosY[robotIndex]; // get the current position of the robot
 
@@ -621,11 +832,11 @@ public:
       shells[robotIndex]--;
       shellsUsed[robotIndex]++;
 
-      // printOutput("Bullets used: " + to_string(shellsUsed[robotIndex]) + ", Bullets left: " + to_string(shells[robotIndex]));
+      printOutput("Bullets used: " + to_string(shellsUsed[robotIndex]) + ", Bullets left: " + to_string(shells[robotIndex]));
       // cout << "Bullets used: " << shellsUsed[robotIndex] << ", Bullets left: " << shells[robotIndex] << endl; 
     }
 
-    for (int i =0; i < size; i++) // for all robots, check if the robot has shells left or lvies 
+    for (int i =0; i < size; i++) // for all robots, check if the robot has shells left or lives 
     {
         if (shells[i] <= 0)
         {
@@ -637,7 +848,7 @@ public:
         
         if (lives[i] < 0)
         {
-          cout << "Robot " << char('A' + i) << " has no live" << endl;
+          //cout << "Robot " << char('A' + i) << " has no live" << endl;
           self_destruct(i);
           return;
         }
@@ -677,12 +888,12 @@ public:
       {
         case 0: 
             moveUpgradeType[robotIndex] = 1;
-            cout << "Robot " << char('A'+ robotIndex) <<" upgraded to HideBot" << endl;
+            cout << "~ Robot " << char('A'+ robotIndex) <<" upgraded to HideBot" << endl;
             break;
 
         case 1: 
             moveUpgradeType[robotIndex] = 2;  
-            cout << "Robot " << char('A'+ robotIndex) << "upgraded to JumpBot" << endl; 
+            cout << "~ Robot " << char('A'+ robotIndex) << " upgraded to JumpBot" << endl; 
             break;
       }
     
@@ -704,6 +915,7 @@ public:
     else if (moveUpgradeType[robotIndex] == 2) // jump
     {
       cout << "JumpBot function" << endl;
+      return; 
     }
     
 
@@ -781,7 +993,7 @@ public:
        
   }
   
-  void look(int robotIndex) override
+  void look(int robotIndex, bool fromUpgrade = false) override
   {
       if (kill[robotIndex] == 1 && lookUpgradeType[robotIndex] == 0) // if the robot has killed any robot and no upgrade
       {
@@ -804,12 +1016,12 @@ public:
         {
           case 0: 
               lookUpgradeType[robotIndex] = 1;
-              cout << "Robot " << char('A'+robotIndex) <<" upgraded to ScoutBot" << endl;
+              cout << "Robot " << char('A'+robotIndex) << " upgraded to ScoutBot" << endl;
               break;
 
           case 1: 
               lookUpgradeType[robotIndex] = 2;  
-              cout << "Robot " << char('A'+robotIndex) << "upgraded to TrackBot" << endl; 
+              cout << "Robot " << char('A'+robotIndex) << " upgraded to TrackBot" << endl; 
               break;
 
         }
@@ -884,7 +1096,12 @@ public:
 
 };
 
-Robot ::Robot(const string& filename) : GenericRobot(filename), ScoutRobot(filename), TrackerRobot(filename) // constructor
+Robot ::Robot(const string& filename) : GenericRobot(filename), 
+                                        ScoutRobot(filename), 
+                                        TrackerRobot(filename), 
+                                        LongShotRobot(filename),
+                                        ThirtyShotsRobot(filename), 
+                                        SemiAutoRobot(filename) // constructor
 {
   srand((unsigned)time(0)); // make sure the random number generator is seeded
                             // so that the robot can move randomly
@@ -904,7 +1121,7 @@ int main()
   int numRobots = robot.getNum_robot();
   robot.set_steps(filename);
   int numSteps = robot.get_steps();
-  robot.set_shells(); 
+  robot.GenericRobot::set_shells(); // preset all shells = 10
   robot.set_lives(filename); // preset all lives = 3
 
   bool gameStart = true;
@@ -916,7 +1133,7 @@ int main()
     // cout << " ---------------- Round " << round  << " -----------------" << endl;
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     {
-      if (robot.get_live(robotIndex) != 0) // robot alive
+      if (robot.get_live(robotIndex) > 0) // robot alive
       {
         cout << "Lives robot " << char('A' + robotIndex) << " : "<< robot.get_live(robotIndex) << endl; // display each robot lives every round
         robot.think(filename, robotIndex); //4 function execute

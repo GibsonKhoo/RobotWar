@@ -1,247 +1,165 @@
 + + + + + + + + + + 
-+ . . C . . . . . + 
++ . . . . . . . . + 
 + . . . . B . . . + 
 + . . . . . A . . + 
 + + + + + + + + + + 
 ---------------- Round 1-----------------
-Robot A fires at (2, 5) and misses.
-Robot A stays at (3, 6)
+Robot A fires at (2, 5) and hits B!
+Bullets used: 1, Bullets left: 9
+Robot A moves from (3, 6) to (2, 6)
 + + + + + + + + + + 
-+ . . C . . . . . + 
-+ . . . . B . . . + 
++ . . . . . . . B + 
++ . . . . . A . . + 
++ . . . . . . . . + 
++ + + + + + + + + + 
+
+
+Robot B stays at (1, 8)
++ + + + + + + + + + 
++ . . . . . . . B + 
++ . . . . . A . . + 
++ . . . . . . . . + 
++ + + + + + + + + + 
+
+
+---------------- Round 2-----------------
+Robot A moves from (2, 6) to (3, 7)
++ + + + + + + + + + 
++ . . . . . . . B + 
++ . . . . . . . . + 
++ . . . . . . A . + 
++ + + + + + + + + + 
+
+
+Robot B stays at (1, 8)
++ + + + + + + + + + 
++ . . . . . . . B + 
++ . . . . . . . . + 
++ . . . . . . A . + 
++ + + + + + + + + + 
+
+
+---------------- Round 3-----------------
+Robot A stays at (3, 7)
++ + + + + + + + + + 
++ . . . . . . . B + 
++ . . . . . . . . + 
++ . . . . . . A . + 
++ + + + + + + + + + 
+
+
+Robot B moves from (1, 8) to (2, 7)
++ + + + + + + + + + 
++ . . . . . . . . + 
++ . . . . . . B . + 
++ . . . . . . A . + 
++ + + + + + + + + + 
+
+
+---------------- Round 4-----------------
+Robot A now has 30 shells!
+Robot A fires at (2, 7) and hits B!
+Bullets used: 2, Bullets left: 29
+Robot A moves from (3, 7) to (3, 6)
++ + + + + + + + + + 
++ . . . . . . . . + 
++ . . . . . . B . + 
 + . . . . . A . . + 
 + + + + + + + + + + 
 
 
 Robot B fires at (3, 6) and hits A!
-Robot B moves from (2, 5) to (3, 6)
-+ + + + + + + + + + 
-+ . . C . . . . . + 
-+ . . . . . . . . + 
-+ . . . . . B A . + 
-+ + + + + + + + + + 
-
-
-Robot C moves from (1, 3) to (2, 3)
+Bullets used: 1, Bullets left: 9
+Robot B moves from (2, 7) to (3, 7)
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ . . C . . . . . + 
-+ . . . . . B A . + 
-+ + + + + + + + + + 
-
-
----------------- Round 2-----------------
-Robot A fires at (3, 6) and hits B!
-Robot A moves from (3, 7) to (2, 7)
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . . C . . . A . + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-Robot B stays at (3, 1)
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . . C . . . A . + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-Robot C moves from (2, 3) to (1, 3)
-+ + + + + + + + + + 
-+ . . C . . . . . + 
-+ . . . . . . A . + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
----------------- Round 3-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A moves from (2, 7) to (3, 7)
-+ + + + + + + + + + 
-+ . . C . . . . . + 
-+ . . . . . . . . + 
-+ B . . . . . A . + 
-+ + + + + + + + + + 
-
-
-Robot B stays at (3, 1)
-+ + + + + + + + + + 
-+ . . C . . . . . + 
-+ . . . . . . . . + 
-+ B . . . . . A . + 
-+ + + + + + + + + + 
-
-
-Robot C moves from (1, 3) to (2, 2)
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . C . . . . . . + 
-+ B . . . . . A . + 
-+ + + + + + + + + + 
-
-
----------------- Round 4-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A moves from (3, 7) to (2, 8)
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . C . . . . . A + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-ScoutRobot is using scout to scan the battlefield!
-~ Enemy is at (2, 2)
-~ Enemy is at (2, 8)
-Robot B fires at (2, 2) and hits C!
-+ + + + + + + + + + 
-+ . . . C . . . . + 
-+ . . . . . . . A + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-Robot C stays at (1, 4)
-+ + + + + + + + + + 
-+ . . . C . . . . + 
-+ . . . . . . . A + 
-+ B . . . . . . . + 
++ . . . . A . . . + 
++ . . . . . . B . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 5-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A moves from (2, 8) to (1, 7)
+Robot A moves from (2, 5) to (3, 4)
 + + + + + + + + + + 
-+ . . . C . . A . + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-ScoutRobot is using scout to scan the battlefield!
-~ Enemy is at (1, 4)
-~ Enemy is at (1, 7)
-+ + + + + + + + + + 
-+ . . . C . . A . + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
++ . . . A . . B . + 
 + + + + + + + + + + 
 
 
-Robot C moves from (1, 4) to (1, 5)
+Robot B stays at (3, 7)
 + + + + + + + + + + 
-+ . . . . C . A . + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
++ . . . . . . . . + 
++ . . . A . . B . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 6-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A stays at (1, 7)
+Robot A stays at (3, 4)
 + + + + + + + + + + 
-+ . . . . C . A . + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-+ + + + + + + + + + 
-+ . . . . C . A . + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
++ . . . A . . B . + 
 + + + + + + + + + + 
 
 
-Robot C moves from (1, 5) to (1, 6)
+Robot B stays at (3, 7)
 + + + + + + + + + + 
-+ . . . . . C A . + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
++ . . . . . . . . + 
++ . . . A . . B . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 7-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A fires at (1, 6) and misses.
-Robot A moves from (1, 7) to (1, 8)
+Robot A moves from (3, 4) to (3, 5)
 + + + + + + + + + + 
-+ . . . . . C . A + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
-+ + + + + + + + + + 
-
-
-ScoutRobot is using scout to scan the battlefield!
-~ Enemy is at (1, 6)
-~ Enemy is at (1, 8)
-+ + + + + + + + + + 
-+ . . . . . C . A + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
++ . . . . A . B . + 
 + + + + + + + + + + 
 
 
-Robot C moves from (1, 6) to (1, 7)
+Robot B moves from (3, 7) to (3, 6)
 + + + + + + + + + + 
-+ . . . . . . C A + 
 + . . . . . . . . + 
-+ B . . . . . . . + 
++ . . . . . . . . + 
++ . . . . A B . . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 8-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A fires at (1, 7) and hits C!
-Robot A moves from (1, 8) to (2, 8)
+Robot A now has 30 shells!
+Robot A fires at (3, 6) and misses.
+Bullets used: 3, Bullets left: 29
+Robot A stays at (3, 5)
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ C . . . . . . A + 
-+ B . . . . . . . + 
++ . . . . . . . . + 
++ . . . . A B . . + 
 + + + + + + + + + + 
 
 
-Robot B fires at (2, 1) and hits C!
+Robot B fires at (3, 5) and misses.
+Bullets used: 2, Bullets left: 8
+Robot B moves from (3, 6) to (2, 5)
 + + + + + + + + + + 
 + . . . . . . . . + 
-+ . . . . . . . A + 
-+ B . . . . C . . + 
++ . . . . B . . . + 
++ . . . . A . . . + 
 + + + + + + + + + + 
 
 
 ---------------- Round 9-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot A moves from (2, 8) to (3, 7)
+Robot A now has 30 shells!
+Robot A fires at (2, 5) and hits B!
+Bullets used: 4, Bullets left: 29
+Robot A moves from (3, 5) to (2, 4)
 + + + + + + + + + + 
++ . . . . . . . B + 
++ . . . A . . . . + 
 + . . . . . . . . + 
-+ . . . . . . . . + 
-+ B . . . . C A . + 
-+ + + + + + + + + + 
-
-
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . . . . . . . . + 
-+ B . . . . C A . + 
-+ + + + + + + + + + 
-
-
----------------- Round 10-----------------
-TrackerRobot is using tracker, but surrounding have no enemy
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . . . . . . . . + 
-+ B . . . . C A . + 
-+ + + + + + + + + + 
-
-
-+ + + + + + + + + + 
-+ . . . . . . . . + 
-+ . . . . . . . . + 
-+ B . . . . C A . + 
 + + + + + + + + + + 
 
 
