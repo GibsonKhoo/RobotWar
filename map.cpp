@@ -141,6 +141,16 @@ class GenericRobot : public Map // initial class for robot
     int * moveUpgradeType; 
     int * shootUpgradeType; 
 
+
+    bool * jump;
+    int * jumpleft;
+
+    bool * hide; 
+    int * hideleft; 
+
+    bool * upg; // see got upg or not
+    bool * kills; // see if the robot has killed any other robots
+
   public:
     void setRobot_num (int s) {
       size = s; 
@@ -180,6 +190,9 @@ class GenericRobot : public Map // initial class for robot
     }; 
 
     int check_map();
+    
+    void upg_hidebot(int targetIndex);
+    void upg_jumpbot(int robotIndex);
 };
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
@@ -224,6 +237,12 @@ GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constru
   {
     shootUpgradeType[i] = 0; 
   }
+  hide = new bool[size](); 
+  hideleft = new int[size](); 
+  jump = new bool [size](); 
+  jumpleft = new int [size](); 
+  upg = new bool [size](); // see got upg or not
+  kills = new bool [size](); // see if the robot has killed any other robots
 }
 
 GenericRobot :: ~GenericRobot () // destructor
@@ -237,6 +256,12 @@ GenericRobot :: ~GenericRobot () // destructor
   delete [] lookUpgradeType;
   delete [] moveUpgradeType;
   delete [] shootUpgradeType;
+  delete [] hide;
+  delete [] hideleft;
+  delete [] jump; 
+  delete [] jumpleft;
+  delete [] upg; 
+  delete [] kills;
 }
 
 void GenericRobot ::get_robotPos(const string& filename) // get the robot position
@@ -340,6 +365,64 @@ void GenericRobot :: set_shells() // set the shells and used shells for each rob
     shellsUsed[i] = 0; // each robot has 0 shells used
   }
 }
+
+void GenericRobot :: upg_hidebot(int target_name) // upgrade the hidebot
+{
+  hide[target_name] = true;
+  hideleft[target_name] = 3; 
+}
+
+void GenericRobot :: upg_jumpbot(int robotIndex) // upgrade the robot so it can jump anywhere
+{
+    // Remove from current position
+    table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.';
+
+    // get new pos
+    int newX = robotPosX[robotIndex];
+    int newY = robotPosY[robotIndex];
+
+    // Find a random empty spot (not on border)
+    do {
+        newX = rand() % (rows);
+        newY = rand() % (cols) ;
+    } while (table[newX][newY] != '.');
+
+    if (newX > 0 && newX < getRows() - 1 && newY > 0 && newY < getCols() - 1) // check inside map
+    {
+      if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex]) // check if the robot is not moving
+      {
+        cout << "Robot '" << char ('A' + robotIndex) << "' stays at (" 
+              << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ")" << endl;
+      }
+      else 
+      {
+        if (table[newX][newY] != '.') // check if the new position is not empty
+        {
+          cout << "Robot '" << char ('A' + robotIndex) << "' cannot jump to (" 
+                << newX << "," << newY << ") as it is occupied." << endl;
+          return; // cannot move to occupied position
+        }
+        else 
+        {
+          cout << "Robot '" << char ('A' + robotIndex) << "' jump from (" 
+                << robotPosX[robotIndex] << "," << robotPosY[robotIndex] << ") to (" 
+                << newX << "," << newY << ")" << endl;
+          robotPosX[robotIndex] = newX;
+          robotPosY[robotIndex] = newY;
+        }
+        
+      }
+      
+    
+    for (int i = 0; i < getNum_robot(); ++i) 
+    {
+        table[robotPosX[i]][robotPosY[i]] = char ('A' + i);
+    }
+    display_map();
+    cout << endl;
+    }
+}
+
 
 void GenericRobot::set_shells(int robotIndex)
 {
@@ -810,15 +893,16 @@ public:
         // cout << "Target out of bounds. Fire action aborted." << endl;
     }
     else 
-    {
-      if (hitChance < 70)
+    { 
+     if (hitChance < 70)
       {
           printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) + ", " + to_string(targetY) 
                       + ") and hits " + string(1, targetName) + "!");
           // cout << "Robot " << char('A' + robotIndex) << " fires at (" << targetX << "," << targetY << ") and hits " << targetName << "!" << endl;
           if (table[targetX][targetY] != '.' && table[targetX][targetY] != '+')
           {
-              respawnRobot(targetName); // shoot and target respawn 
+              respawnRobot(targetName); // shoot and target respawn
+              kills[robotIndex] = true;
           }
           kill[robotIndex]++; 
           lives[targerNameIndex]--;
@@ -919,7 +1003,38 @@ public:
     }
     
 
-      // Remove from current position
+      if (jump[robotIndex]) {
+      jumpleft[robotIndex]--;
+        if (jumpleft[robotIndex] == 0) {
+          cout << "Robot " << char('A' + robotIndex) << " jump upgrade expired." << endl;
+        }
+      }
+
+    if (hide[robotIndex]) {
+      hideleft[robotIndex]--;
+        if (hideleft[robotIndex] == 0) {
+          cout << "Robot " << char('A' + robotIndex) << " hide upgrade expired." << endl;
+       }
+      }
+
+    if (kills[robotIndex] && !upg[robotIndex]){ // if the robot has killed any other robots
+      int type = rand() % 2; // randomly choose to upgrade hide or jump
+      if (type == 0) // upgrade 
+      {
+        jump[robotIndex] = true; // upgrade to jump mode
+        jumpleft[robotIndex] = 3; // set the jump left to 3
+        cout << "Robot " << char ('A' + robotIndex) << " upgraded to jump mode." << endl;
+        upg_jumpbot(robotIndex); 
+      }
+      else  // upgrade to hide
+      {
+        upg_hidebot(robotIndex); // upgrade to hide mode
+        cout << "Robot " << char ('A' + robotIndex) << " upgraded to hide mode." << endl;
+      }
+      upg[robotIndex] = true; // mark the robot as upgraded
+    }
+    else {
+    // Remove from current position
     table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.';
 
     int dir = rand() % 8; // Randomly choose a direction
@@ -980,8 +1095,6 @@ public:
       printOutput("Robot " + string(1, char('A' + robotIndex)) + " stays at (" + to_string(robotPosX[robotIndex]) 
                     + ", " + to_string(robotPosY[robotIndex]) + ")");
     }
-  
-    
 
     // display all robots
     for (int i = 0; i < getNum_robot(); ++i) 
@@ -1073,6 +1186,18 @@ public:
           char target_name = table[target_x][target_y];
 
           if (target_name >= 'A' && target_name <= 'Z')
+          {              
+            if (upg[target_name - 'A'] && hide[target_name - 'A']) // check if the target robot is upgraded and hidden
+              {
+                continue; // cannot see the target robot
+              }
+                if (target_name != robotIndex) // check if the target is not itself
+                {
+                  cout << "Robot " << char('A' + robotIndex) << " detects robot " << target_name << " at (" << target_x << "," << target_y << ")" << endl;
+                  shoot(robotIndex, dx[d], dy[d], target_name); // fire at the target robot
+                  return;
+                }
+          }
           {
             if (target_name != ('A' + robotIndex)) // check if the target is not itself
             {
@@ -1093,7 +1218,6 @@ public:
       return; // if no target found
     }
   }
-
 };
 
 Robot ::Robot(const string& filename) : GenericRobot(filename), 
