@@ -1,7 +1,7 @@
-Columns by Rows : 5, 10
-steps: 5
-robots: 2
-GenericRobot1 Name: Kidd , Pos : (3,6)
-GenericRobot2 Name: Jett , Pos : (2,5)
-
-
+Columns by Rows : 10, 10
+steps: 30
+robots: 3
+lives: 3
+GenericRobot1 Name: Kidd , Pos : (2,6)
+GenericRobot2 Name: Jett , Pos : (3,5)
+GenericRobot2 Name: Ann , Pos : (1,5)
