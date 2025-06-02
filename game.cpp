@@ -1,3 +1,42 @@
+/**********|**********|**********|
+Program: game.cpp
+Course: Data Structures and Algorithms
+Trimester: 2510
+Name: LIM JUN ZHAO
+ID: 242UC244PS
+Lecture Section: TC1L 
+Tutorial Section: TT2L
+Email: lim.jun.zhao@student.mmu.edu.my
+Phone: 0126010726
+
+Name: KHOO SHEN ZHI
+ID: 242UC244SJ
+Lecture Section: TC1L 
+Tutorial Section: TT2L
+Email: khoo.shen.zhi@student.mmu.edu.my
+Phone: 011-36735033
+
+
+Name: FARAH ALYSSA BINTI SHARANI
+ID: 242UC244DM
+Lecture Section: TC1L 
+Tutorial Section: TT2L
+Email: FARAH.ALYSSA.SHARANI@student.mmu.edu.my
+Phone: 0192648995
+
+Name: NUR ALISHA DAMIA BINTI SHAMSUL ANUAR
+ID: 2242UC244S4
+Lecture Section: TC1L 
+Tutorial Section: TT2L
+Email: NUR.ALISHA.DAMIA@student.mmu.edu.my
+Phone: 016-6647156
+
+**********|**********|**********/
+
+
+
+
+
 #include <iostream> 
 #include <fstream>
 #include <string>
@@ -773,47 +812,48 @@ class JumpRobot : public MovingRobot
             newY = rand() % (cols) ;
         } while (table[newX][newY] != '.');
 
-      if (newX > 0 && newX < getRows() - 1 && newY > 0 && newY < getCols() - 1) // check inside map
-      {
-        if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex]) // check if the robot is not moving
+        if (newX > 0 && newX < getRows() - 1 && newY > 0 && newY < getCols() - 1) // check inside map
         {
-          printOutput("Robot " + string(1, char('A' + robotIndex)) + " stays at (" + to_string(robotPosX[robotIndex]) 
-                      + ", " + to_string(robotPosY[robotIndex]) + ")");
-        }
-        else 
-        {
-          if (table[newX][newY] != '.') // check if the new position is not empty
+          if (newX == robotPosX[robotIndex] && newY == robotPosY[robotIndex]) // check if the robot is not moving
           {
-            printOutput("Robot " + string(1, char('A' + robotIndex)) + " cannot jump to (" 
-                        + to_string(newX) + ", " + to_string(newY) + ") as it is occupied.");
-            return; // cannot move to occupied position
+            printOutput("Robot " + string(1, char('A' + robotIndex)) + " stays at (" + to_string(robotPosX[robotIndex]) 
+                        + ", " + to_string(robotPosY[robotIndex]) + ")");
           }
           else 
           {
-            printOutput("Robot " + string(1, char('A' + robotIndex)) + " jump from (" 
-                        + to_string(robotPosX[robotIndex]) + ", " + to_string(robotPosY[robotIndex]) 
-                        + ") to (" + to_string(newX) + ", " + to_string(newY) + ")");
-            robotPosX[robotIndex] = newX;
-            robotPosY[robotIndex] = newY;
+            if (table[newX][newY] != '.') // check if the new position is not empty
+            {
+              printOutput("Robot " + string(1, char('A' + robotIndex)) + " cannot jump to (" 
+                          + to_string(newX) + ", " + to_string(newY) + ") as it is occupied.");
+              return; // cannot move to occupied position
+            }
+            else 
+            {
+              printOutput("Robot " + string(1, char('A' + robotIndex)) + " jump from (" 
+                          + to_string(robotPosX[robotIndex]) + ", " + to_string(robotPosY[robotIndex]) 
+                          + ") to (" + to_string(newX) + ", " + to_string(newY) + ")");
+              robotPosX[robotIndex] = newX;
+              robotPosY[robotIndex] = newY;
+            }
+            
           }
-          
         }
-      }
-      
-      for (int i = 0; i < getNum_robot(); ++i) 
-      {
-          table[robotPosX[i]][robotPosY[i]] = char ('A' + i);
-      }
-      display_robotPos();
-      display_map();
-      printOutput("\n");
         
-    }
-     else 
-    {
-      return;
-    }
-  };
+        for (int i = 0; i < getNum_robot(); ++i) 
+        {
+            table[robotPosX[i]][robotPosY[i]] = char ('A' + i);
+        }
+        display_robotPos();
+        display_map();
+        printOutput("\n");
+        
+      }
+      else 
+      {
+        return;
+      }
+    };
+};
 
 class Robot : public ThinkingRobot, 
               public ScoutRobot, 
@@ -921,13 +961,13 @@ public:
     {
       if (hitChance > 70)
       {
-        printOutput("Robot " + string(1, char('A' + robotIndex)) + "fires at (" + to_string(targetX) 
-                    + ", " + to_string(targetY) + ") and hits " + to_string(targetName) + "!");
+        printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) 
+                    + ", " + to_string(targetY) + ") and hits " +  string(1, targetName) + "!");
 
         //check if the targetrobot is upgraded to hide onot 
         if (hide[targerNameIndex] && remainingHide[targerNameIndex] > 0) 
         {
-            printOutput("Robot " + to_string(targetName) + " dodged the attack using HideBot!");
+            printOutput("Robot " + string(1, targetName) + " dodged the attack using HideBot!");
             remainingHide[targerNameIndex]--;
             
             if (remainingHide[targerNameIndex] == 0) 
@@ -938,7 +978,7 @@ public:
             }
             else 
             {
-              printOutput("Robot " + to_string(targetName) + " left " + to_string(remainingHide[targerNameIndex]) + " hide.");
+              printOutput("Robot " + string(1, targetName) + " left " + to_string(remainingHide[targerNameIndex]) + " hide.");
             }
             return; // Attack is dodged, do not apply damage
         }
@@ -954,7 +994,7 @@ public:
       }
       else
       {
-          printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) + ", " + to_string(targetY) + ") and misses the shot to " + to_string(targetName));
+          printOutput("Robot " + string(1, char('A' + robotIndex)) + " fires at (" + to_string(targetX) + ", " + to_string(targetY) + ") and misses the shot to " +  string(1, targetName));
       }
 
       shells[robotIndex]--;
@@ -1026,7 +1066,11 @@ public:
     {
       if (remainingJump == 0)
       {
-        return;
+        // Jump upgrade used up, fall back to normal move
+          moveUpgradeType[robotIndex] = 0; // Remove jump upgrade
+
+          Robot::move(filename, robotIndex, false);
+          return;
       }
       else
       {
@@ -1223,7 +1267,7 @@ Robot ::Robot(const string& filename) : GenericRobot(filename),
 
 int main()
 {
-  string filename = "game.txt"; // file name
+  string filename = "setup.txt"; // file name
   Robot robot(filename); // Only one Robot object
 
   int numRobots = robot.getNum_robot();
@@ -1248,10 +1292,23 @@ int main()
   {
     printOutput("---------------- Round " + to_string(round) + "-----------------");
     
+    
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     { 
       
       robot.display_robotPos(); // update robot positions on the map
+
+      // --- Add this block to check shells after each turn ---
+      if (robot.get_shells(robotIndex) <= 0) 
+      {
+          printOutput("Robot " + string(1, char('A' + robotIndex)) + " has no shells left.");
+          printOutput("Robot " + string(1, char('A' + robotIndex)) + " self-destruct.  \n\n");
+        
+          robot.self_destruct(robotIndex);
+          robot.display_robotPos();
+          continue;
+      }
+
 
       if (robot.get_live(robotIndex) > 0) // robot alive
       {
@@ -1273,13 +1330,7 @@ int main()
           return 0;
         }
       }
-      // --- Add this block to check shells after each turn ---
-      if (robot.get_shells(robotIndex) <= 0) 
-      {
-          cout << "Robot " << char('A' + robotIndex) << " has no shells left." << endl << endl;         
-          robot.self_destruct(robotIndex);
-          robot.display_robotPos();
-      }
+      
     }
     numSteps--; 
     round++; 

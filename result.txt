@@ -7,997 +7,1180 @@
 + . . . . . . + 
 + + + + + + + + 
 ---------------- Round 1-----------------
+Lives robot A: 3
+Robot A fires at (3, 5) and hits B!
 Bullet used: 1 , Bullets left: 9
-Robot A moves from (2, 6) to (1, 5)
+Robot A stays at (2, 6)
 + + + + + + + + 
-+ . . . . A . + 
-+ B . . . . . + 
-+ . . . C . . + 
 + . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (2, 1) to (2, 2)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . B . . . . + 
-+ . . . C . . + 
++ . . . . . A + 
++ . . B C . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
-Robot C moves from (3, 4) to (4, 4)
+Lives robot B: 2
+Robot B fires at (3, 4) and hits C!
+Bullet used: 1 , Bullets left: 9
+Robot B moves from (3, 3) to (2, 3)
 + + + + + + + + 
-+ . . . . A . + 
-+ . B . . . . + 
 + . . . . . . + 
-+ . . . C . . + 
++ . . B . . A + 
 + . . . . . . + 
 + . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Robot C stays at (6, 6)
++ + + + + + + + 
++ . . . . . . + 
++ . . B . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 2-----------------
-ScoutRobot is using scout to scan the battlefield!
-~ Enemy is at (2, 2)
-~ Enemy is at (4, 4)
-Robot A moves from (1, 5) to (2, 6)
+Lives robot A: 3
+~ Robot A upgraded to JumpBot
+TrackerRobot is using tracker, but surrounding have no enemy
+Robot A moves from (2, 6) to (1, 6)
 + + + + + + + + 
-+ . . . . . . + 
-+ . B . . . A + 
-+ . . . . . . + 
-+ . . . C . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (2, 2) to (3, 3)
-+ + + + + + + + 
-+ . . . . . . + 
 + . . . . . A + 
 + . . B . . . + 
-+ . . . C . . + 
 + . . . . . . + 
 + . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
-Bullet used: 1 , Bullets left: 9
-Robot C moves from (4, 4) to (3, 4)
+Lives robot B: 2
+~ Robot B upgraded to HideBot
+ScoutRobot is using scout to scan the battlefield!
+~ Enemy is at (1, 6)
+~ Enemy is at (6, 6)
+Robot B moves from (2, 3) to (3, 2)
 + + + + + + + + 
-+ . . . . . . + 
 + . . . . . A + 
-+ . . . C . . + 
 + . . . . . . + 
-+ B . . . . . + 
++ . B . . . . + 
 + . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Robot C stays at (6, 6)
++ + + + + + + + 
++ . . . . . A + 
++ . . . . . . + 
++ . B . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 3-----------------
-ScoutRobot is using scout to scan the battlefield!
-~ Enemy is at (3, 4)
-~ Enemy is at (5, 1)
-Robot A moves from (2, 6) to (1, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . . C . . + 
-+ . . . . . . + 
-+ B . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B stays at (5, 1)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . . C . . + 
-+ . . . . . . + 
-+ B . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 4) to (4, 4)
+Robot A moves from (1, 6) to (2, 5)
 + + + + + + + + 
++ . . . . . . + 
++ . . . . A . + 
++ . B . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot B: 2
+ScoutRobot is using scout to scan the battlefield!
+~ Enemy is at (2, 5)
+~ Enemy is at (6, 6)
+Robot B moves from (3, 2) to (4, 3)
++ + + + + + + + 
++ . . . . . . + 
 + . . . . A . + 
 + . . . . . . + 
++ . . B . . . + 
 + . . . . . . + 
-+ . . . C . . + 
-+ B . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Robot C stays at (6, 6)
++ + + + + + + + 
 + . . . . . . + 
++ . . . . A . + 
++ . . . . . . + 
++ . . B . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 4-----------------
-ScoutRobot is using scout to scan the battlefield!
-~ Enemy is at (4, 4)
-~ Enemy is at (5, 1)
-Robot A moves from (1, 5) to (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . C . . + 
-+ B . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (5, 1) to (5, 2)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . C . . + 
-+ . B . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (4, 4) to (3, 3)
+Robot A moves from (2, 5) to (1, 4)
 + + + + + + + + 
 + . . . A . . + 
 + . . . . . . + 
-+ . . C . . . + 
 + . . . . . . + 
-+ . B . . . . + 
++ . . B . . . + 
 + . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot B: 2
+ScoutRobot is using scout to scan the battlefield!
+~ Enemy is at (1, 4)
+~ Enemy is at (6, 6)
+Robot B moves from (4, 3) to (4, 4)
++ + + + + + + + 
++ . . . A . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . B . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Robot C stays at (6, 6)
++ + + + + + + + 
++ . . . A . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . B . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 5-----------------
-Robot A stays at (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . C . . . + 
-+ . . . . . . + 
-+ . B . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (5, 2) to (6, 3)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . C . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 3) to (4, 3)
+Robot A moves from (1, 4) to (1, 5)
 + + + + + + + + 
-+ . . . A . . + 
++ . . . . A . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . C . . . + 
++ . . . B . . + 
 + . . . . . . + 
-+ . . B . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot B: 2
+Robot B moves from (4, 4) to (5, 5)
++ + + + + + + + 
++ . . . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . B . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Robot C fires at (5, 5) and misses the shot to B
+Bullet used: 1 , Bullets left: 9
+Robot C stays at (6, 6)
++ + + + + + + + 
++ . . . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . B . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 6-----------------
-Robot A moves from (1, 4) to (2, 5)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . C . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
-Robot B stays at (6, 3)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . C . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (4, 3) to (4, 2)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
----------------- Round 7-----------------
-Robot A moves from (2, 5) to (1, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (6, 3) to (5, 3)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . C . . . . + 
-+ . . B . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (4, 2) to (3, 3)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . C . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
----------------- Round 8-----------------
 Robot A moves from (1, 5) to (1, 6)
 + + + + + + + + 
 + . . . . . A + 
 + . . . . . . + 
-+ . . C . . . + 
 + . . . . . . + 
-+ . . B . . . + 
 + . . . . . . + 
++ . . . . B . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
-Robot B moves from (5, 3) to (6, 4)
+Lives robot B: 2
+Robot B fires at (6, 6) and misses the shot to C
+Bullet used: 2 , Bullets left: 8
+Robot B moves from (5, 5) to (5, 6)
 + + + + + + + + 
 + . . . . . A + 
 + . . . . . . + 
-+ . . C . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . B . . + 
++ . . . . . B + 
++ . . . . . C + 
 + + + + + + + + 
 
 
+Lives robot C: 2
+Robot C fires at (5, 6) and hits B!
+Bullet used: 2 , Bullets left: 8
+Robot C stays at (6, 6)
++ + + + + + + + 
++ . B . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+---------------- Round 7-----------------
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 3) to (3, 2)
+Robot A stays at (1, 6)
 + + + + + + + + 
-+ . . . . . A + 
-+ . . . . . . + 
-+ . C . . . . + 
++ . B . . . A + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . B . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (1, 2) to (1, 1)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (6, 6) to (6, 5)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+---------------- Round 8-----------------
+Lives robot A: 3
+TrackerRobot is using tracker, but surrounding have no enemy
+Robot A stays at (1, 6)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B stays at (1, 1)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (6, 5) to (6, 6)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 9-----------------
+Lives robot A: 3
+TrackerRobot is using tracker, but surrounding have no enemy
 Robot A stays at (1, 6)
 + + + + + + + + 
-+ . . . . . A + 
-+ . . . . . . + 
-+ . C . . . . + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . B . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
-Robot B moves from (6, 4) to (5, 5)
+Lives robot B: 1
+Robot B stays at (1, 1)
 + + + + + + + + 
-+ . . . . . A + 
++ B . . . . A + 
 + . . . . . . + 
-+ . C . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
 + . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 2) to (2, 2)
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (6, 6) to (5, 5)
 + + + + + + + + 
-+ . . . . . A + 
-+ . C . . . . + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . . . + 
++ . . . . C . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 10-----------------
+Lives robot A: 3
+TrackerRobot is using tracker, but surrounding have no enemy
 Robot A stays at (1, 6)
 + + + + + + + + 
-+ . . . . . A + 
-+ . C . . . . + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . . . + 
++ . . . . C . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
-Robot B moves from (5, 5) to (6, 5)
+Lives robot B: 1
+Robot B stays at (1, 1)
 + + + + + + + + 
-+ . . . . . A + 
-+ . C . . . . + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . C . + 
++ . . . . . . + 
 + + + + + + + + 
 
 
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 2) to (1, 2)
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (5, 5) to (6, 6)
 + + + + + + + + 
-+ . C . . . A + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 11-----------------
-Robot A moves from (1, 6) to (1, 5)
-+ + + + + + + + 
-+ . C . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
-Robot B stays at (6, 5)
-+ + + + + + + + 
-+ . C . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (1, 2) to (2, 2)
+Robot A stays at (1, 6)
 + + + + + + + + 
-+ . . . . A . + 
-+ . C . . . . + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B stays at (1, 1)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C stays at (6, 6)
++ + + + + + + + 
++ B . . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
 + + + + + + + + 
 
 
 ---------------- Round 12-----------------
-Robot A moves from (1, 5) to (1, 6)
-+ + + + + + + + 
-+ . . . . . A + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
-Robot B stays at (6, 5)
-+ + + + + + + + 
-+ . . . . . A + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 2) to (3, 1)
+Robot A stays at (1, 6)
 + + + + + + + + 
-+ . . . . . A + 
-+ . . . . . . + 
-+ C . . . . . + 
++ B . . . . A + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (1, 1) to (1, 2)
++ + + + + + + + 
++ . B . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (6, 6) to (6, 5)
++ + + + + + + + 
++ . B . . . A + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
 + + + + + + + + 
 
 
 ---------------- Round 13-----------------
-Robot A moves from (1, 6) to (2, 6)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . . . . A + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
-Robot B stays at (6, 5)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . . . . A + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 1) to (2, 2)
+Robot A moves from (1, 6) to (2, 5)
++ + + + + + + + 
++ . B . . . . + 
++ . . . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (1, 2) to (2, 1)
 + + + + + + + + 
 + . . . . . . + 
-+ . C . . . A + 
++ B . . . A . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C stays at (6, 5)
++ + + + + + + + 
++ . . . . . . + 
++ B . . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
 + + + + + + + + 
 
 
 ---------------- Round 14-----------------
-Robot A moves from (2, 6) to (1, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
-Robot B stays at (6, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 2) to (2, 1)
+Robot A moves from (2, 5) to (3, 5)
 + + + + + + + + 
++ . . . . . . + 
++ B . . . . . + 
 + . . . . A . + 
-+ C . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (2, 1) to (3, 2)
++ + + + + + + + 
 + . . . . . . + 
-+ . . . . B . + 
++ . . . . . . + 
++ . B . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C stays at (6, 5)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . . . + 
++ . B . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
 + + + + + + + + 
 
 
 ---------------- Round 15-----------------
-Robot A stays at (1, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . B . + 
-+ + + + + + + + 
-
-
-Robot B moves from (6, 5) to (6, 4)
-+ + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . B . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 1) to (2, 2)
+Robot A moves from (3, 5) to (2, 5)
 + + + + + + + + 
++ . . . . . . + 
 + . . . . A . + 
-+ . C . . . . + 
++ . B . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (3, 2) to (2, 1)
++ + + + + + + + 
++ . . . . . . + 
++ B . . . A . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . . B . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (6, 5) to (5, 4)
++ + + + + + + + 
++ . . . . . . + 
++ B . . . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . C . . + 
++ . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 16-----------------
-Robot A moves from (1, 5) to (2, 6)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . C . . . A + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . B . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (6, 4) to (6, 3)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . C . . . A + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 2) to (1, 3)
+Robot A moves from (2, 5) to (1, 4)
 + + + + + + + + 
-+ . . C . . . + 
-+ . . . . . A + 
++ . . . A . . + 
++ B . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . C . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (2, 1) to (2, 2)
++ + + + + + + + 
++ . . . A . . + 
++ . B . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . C . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (5, 4) to (6, 5)
++ + + + + + + + 
++ . . . A . . + 
++ . B . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . B . . . + 
++ . . . . C . + 
 + + + + + + + + 
 
 
 ---------------- Round 17-----------------
-Robot A moves from (2, 6) to (2, 5)
-+ + + + + + + + 
-+ . . C . . . + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
-Robot B stays at (6, 3)
-+ + + + + + + + 
-+ . . C . . . + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (1, 3) to (2, 4)
+Robot A stays at (1, 4)
 + + + + + + + + 
++ . . . A . . + 
++ . B . . . . + 
 + . . . . . . + 
-+ . . . C A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (2, 2) to (1, 3)
++ + + + + + + + 
++ . . B A . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . . B . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (6, 5) to (5, 4)
++ + + + + + + + 
++ . . B A . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . C . . + 
++ . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 18-----------------
-Bullet used: 2 , Bullets left: 8
-Robot A moves from (2, 5) to (1, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . C . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (6, 3) to (5, 4)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . C . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . B . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 4) to (3, 3)
+Robot A moves from (1, 4) to (1, 5)
++ + + + + + + + 
++ . . B . A . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . C . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (1, 3) to (2, 2)
 + + + + + + + + 
 + . . . . A . + 
++ . B . . . . + 
 + . . . . . . + 
-+ . . C . . . + 
 + . . . . . . + 
-+ . . . B . . + 
++ . . . C . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (5, 4) to (4, 5)
++ + + + + + + + 
++ . . . . A . + 
++ . B . . . . + 
++ . . . . . . + 
++ . . . . C . + 
++ . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 19-----------------
+Lives robot A: 3
+TrackerRobot is using tracker, but surrounding have no enemy
 Robot A stays at (1, 5)
 + + + + + + + + 
 + . . . . A . + 
++ . B . . . . + 
 + . . . . . . + 
-+ . . C . . . + 
-+ . . . . . . + 
-+ . . . B . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (5, 4) to (4, 4)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ . . C . . . + 
-+ . . . B . . + 
++ . . . . C . + 
 + . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 3) to (3, 2)
+Lives robot B: 1
+Robot B moves from (2, 2) to (3, 3)
 + + + + + + + + 
 + . . . . A . + 
 + . . . . . . + 
-+ . C . . . . + 
-+ . . . B . . + 
++ . . B . . . + 
++ . . . . C . + 
++ . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (4, 5) to (3, 6)
++ + + + + + + + 
++ . . . . A . + 
++ . . . . . . + 
++ . . B . . C + 
++ . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 20-----------------
-Robot A moves from (1, 5) to (1, 6)
-+ + + + + + + + 
-+ . . . . . A + 
-+ . . . . . . + 
-+ . C . . . . + 
-+ . . . B . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (4, 4) to (3, 3)
-+ + + + + + + + 
-+ . . . . . A + 
-+ . . . . . . + 
-+ . C B . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 2) to (2, 1)
+Robot A moves from (1, 5) to (2, 5)
 + + + + + + + + 
-+ . . . . . A + 
-+ C . . . . . + 
-+ . . B . . . + 
 + . . . . . . + 
++ . . . . A . + 
++ . . B . . C + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (3, 3) to (3, 2)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . A . + 
++ . B . . . C + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C fires at (2, 5) and misses the shot to A
+Bullet used: 3 , Bullets left: 7
+Robot C moves from (3, 6) to (4, 6)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . A . + 
++ . B . . . . + 
++ . . . . . C + 
 + . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 21-----------------
-Robot A moves from (1, 6) to (1, 5)
-+ + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
-+ . . B . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (3, 3) to (3, 2)
-+ + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
-+ . B . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 3
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 1) to (1, 1)
+Robot A moves from (2, 5) to (3, 5)
 + + + + + + + + 
-+ C . . . A . + 
-+ . . . . . . + 
-+ . B . . . . + 
 + . . . . . . + 
 + . . . . . . + 
++ . B . . A . + 
++ . . . . . C + 
 + . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (3, 2) to (4, 2)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . A . + 
++ . B . . . C + 
++ . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C fires at (3, 5) and hits A!
+Bullet used: 4 , Bullets left: 6
+~ Robot C upgraded to JumpBot
+Robot C stays at (4, 6)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . B . . . C + 
++ . . . . . . + 
++ . A . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 22-----------------
-Robot A stays at (1, 5)
-+ + + + + + + + 
-+ C . . . A . + 
-+ . . . . . . + 
-+ . B . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (3, 2) to (4, 3)
-+ + + + + + + + 
-+ C . . . A . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . B . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 2
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (1, 1) to (2, 1)
+Robot A moves from (6, 2) to (5, 2)
 + + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
 + . . . . . . + 
-+ . . B . . . + 
 + . . . . . . + 
++ . . . . . . + 
++ . B . . . C + 
++ . A . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B fires at (5, 2) and misses the shot to A
+Bullet used: 3 , Bullets left: 7
+Robot B moves from (4, 2) to (5, 3)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ . A B . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (4, 6) to (3, 6)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ . . . . . . + 
++ . A B . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 23-----------------
-Robot A stays at (1, 5)
+Lives robot A: 2
+TrackerRobot is using tracker, but surrounding have no enemy
+Robot A moves from (5, 2) to (4, 1)
 + + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
 + . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ A . . . . . + 
 + . . B . . . + 
 + . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (5, 3) to (4, 2)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . C + 
++ A B . . . . + 
++ . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
-Robot B moves from (4, 3) to (3, 4)
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (3, 6) to (2, 5)
 + + + + + + + + 
-+ . . . . A . + 
-+ C . . . . . + 
-+ . . . B . . + 
 + . . . . . . + 
++ . . . . C . + 
 + . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (2, 1) to (3, 1)
-+ + + + + + + + 
-+ . . . . A . + 
-+ . . . . . . + 
-+ C . . B . . + 
-+ . . . . . . + 
++ A B . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 24-----------------
-Robot A moves from (1, 5) to (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ C . . B . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
-Robot B moves from (3, 4) to (2, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . B . . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 2
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (3, 1) to (4, 1)
+Robot A moves from (4, 1) to (5, 2)
 + + + + + + + + 
-+ . . . A . . + 
-+ . . . B . . + 
 + . . . . . . + 
-+ C . . . . . + 
++ . . . . C . + 
++ . . . . . . + 
++ . B . . . . + 
++ . A . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B fires at (5, 2) and misses the shot to A
+Bullet used: 4 , Bullets left: 6
+Robot B moves from (4, 2) to (3, 2)
++ + + + + + + + 
++ . . . . . . + 
++ . . . . C . + 
++ . B . . . . + 
++ . . . . . . + 
++ . A . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Remaining Jump upgrade 2
+Robot C jump from (2, 5) to (6, 2)
++ + + + + + + + 
 + . . . . . . + 
 + . . . . . . + 
++ . B . . . . + 
++ . . . . . . + 
++ . A . . . . + 
++ . C . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 25-----------------
-Bullet used: 3 , Bullets left: 7
-Robot A stays at (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 2
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C stays at (4, 1)
+Robot A moves from (5, 2) to (5, 3)
 + + + + + + + + 
-+ . . . A . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ C . . . . . + 
++ . B . . . . + 
++ . . . . . . + 
++ . . A . . . + 
++ . C . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (3, 2) to (2, 1)
++ + + + + + + + 
++ . . . . . . + 
++ B . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
++ . . A . . . + 
++ . C . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C fires at (5, 3) and misses the shot to A
+Bullet used: 5 , Bullets left: 5
+Robot C stays at (6, 2)
++ + + + + + + + 
++ . . . . . . + 
++ B . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . A . . . + 
++ . C . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 26-----------------
-Robot A stays at (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 2
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (4, 1) to (5, 1)
+Robot A cannot move to (6, 2) as it is occupied.
 + + + + + + + + 
-+ . . . A . . + 
++ . . . . . . + 
++ B . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . A . . . + 
++ . C . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B moves from (2, 1) to (1, 2)
++ + + + + + + + 
++ . B . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
++ . . A . . . + 
++ . C . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C fires at (5, 3) and hits A!
+Bullet used: 6 , Bullets left: 4
+Remaining Jump upgrade 1
+Robot C jump from (6, 2) to (2, 1)
++ + + + + + + + 
++ . B . . . . + 
 + C . . . . . + 
++ . A . . . . + 
++ . . . . . . + 
++ . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 27-----------------
-Robot A stays at (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 1
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (5, 1) to (6, 1)
+Robot A moves from (3, 2) to (2, 3)
 + + + + + + + + 
-+ . . . A . . + 
++ . B . . . . + 
++ C . A . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ C . . . . . + 
++ + + + + + + + 
+
+
+Lives robot B: 1
+Robot B fires at (2, 3) and misses the shot to A
+Bullet used: 5 , Bullets left: 5
+Robot B cannot move to (2, 1) as it is occupied.
++ + + + + + + + 
++ . B . . . . + 
++ C . A . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+~ Robot C upgraded to SemiAutoBot
+Robot C fires at (1, 2) and hits B!
+Bullet used: 7 , Bullets left: 3
+Robot C stays at (2, 1)
++ + + + + + + + 
++ . . . . . . + 
++ C . A . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 28-----------------
-Robot A stays at (1, 4)
-+ + + + + + + + 
-+ . . . A . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ C . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 1
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (6, 1) to (5, 1)
+Robot A moves from (2, 3) to (2, 4)
 + + + + + + + + 
-+ . . . A . . + 
++ . . . . . . + 
++ C . . A . . + 
 + . . . . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ C . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Robot B is dead. 
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Remaining Jump upgrade 0
+Robot C jump from (2, 1) to (2, 5)
++ + + + + + + + 
++ . . . . . . + 
++ . . . A C . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 29-----------------
-Robot A moves from (1, 4) to (2, 3)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . A . . . + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ C . . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 1
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (5, 1) to (5, 2)
+Robot A moves from (2, 4) to (1, 4)
 + + + + + + + + 
++ . . . A . . + 
++ . . . . C . + 
 + . . . . . . + 
-+ . . A . . . + 
 + . . . . . . + 
 + . . . . . . + 
-+ . C . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Robot B is dead. 
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C fires at (1, 4) and misses the shot to A
+Bullet used: 8 , Bullets left: 2
+Robot C moves from (2, 5) to (1, 6)
++ + + + + + + + 
++ . . . A . C + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
 ---------------- Round 30-----------------
-Robot A moves from (2, 3) to (3, 3)
-+ + + + + + + + 
-+ . . . . . . + 
-+ . . . . . . + 
-+ . . A . . . + 
-+ . . . . . . + 
-+ . C . . . . + 
-+ . . . . . . + 
-+ + + + + + + + 
-
-
+Lives robot A: 1
 TrackerRobot is using tracker, but surrounding have no enemy
-Robot C moves from (5, 2) to (5, 3)
+Robot A moves from (1, 4) to (2, 3)
 + + + + + + + + 
-+ . . . . . . + 
-+ . . . . . . + 
++ . . . . . C + 
 + . . A . . . + 
 + . . . . . . + 
-+ . . C . . . + 
++ . . . . . . + 
++ . . . . . . + 
 + . . . . . . + 
 + + + + + + + + 
 
 
+Robot B is dead. 
+
+Lives robot C: 2
+Look upgrades already taken by other robots. No upgrade applied.
+Robot C moves from (1, 6) to (1, 5)
++ + + + + + + + 
++ . . . . C . + 
++ . . A . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ . . . . . . + 
++ + + + + + + + 
+
+
+Game Over
