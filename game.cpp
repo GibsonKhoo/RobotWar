@@ -722,7 +722,7 @@ class SemiAutoRobot : public LookingRobot, public ShootingRobot
   public: 
   SemiAutoRobot(const string& filename): GenericRobot(filename){} // default constructor
   
-  void look (int robotIndex, bool isUpgraded) override
+  void look (int robotIndex, bool isUpgraded = true) override
   {
 
     if (robotIndex >= size) //check if the robot exist
@@ -758,7 +758,7 @@ class SemiAutoRobot : public LookingRobot, public ShootingRobot
             {
                 
                 int shots = isUpgraded ? 3 : 1; // 3 shots if upgraded(true), 1 otherwise (false)
-                for (int i =0; i <shots; i++)
+                for (int i =0; i < shots; i++)
                 {
                   shoot(robotIndex, dx[d], dy[d], target_name, true); // fire at the target robot
                   printOutput("\n");
@@ -795,7 +795,7 @@ class JumpRobot : public MovingRobot
   public:
     JumpRobot(const string& filename): GenericRobot(filename){} // default constructor
 
-    void move(const string& filename, int robotIndex, bool isUpgraded) override 
+    void move(const string& filename, int robotIndex, bool isUpgraded = true) override 
     {
       remainingJump[robotIndex]--;
       if (remainingJump[robotIndex] >= 0)
@@ -928,7 +928,7 @@ public:
       {
         if ((rand() % 2) == 0)
         {
-           SemiAutoRobot::look(robotIndex, true);
+           SemiAutoRobot::look(robotIndex);
         }
         
       }
@@ -1052,7 +1052,6 @@ public:
               printOutput("~ Robot " + string(1, char('A' + robotIndex)) + " upgraded to " + (upg == 1 ? "HideBot" : "JumpBot"));
               
               upgraded = true;
-              // isUpgraded = true; // set the isUpgraded to true
               break;
           }
       }
@@ -1197,7 +1196,6 @@ public:
                 printOutput("~ Robot " + string(1, char('A' + robotIndex)) + " upgraded to " + (upg == 1 ? "HideBot" : "JumpBot"));
                 
                 upgraded = true;
-                //isUpgraded = true; // set the isUpgraded to true
                 break;
             }
         }
