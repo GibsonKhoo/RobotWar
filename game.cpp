@@ -232,6 +232,7 @@ class GenericRobot : public Map // initial class for robot
 
     void set_initialJump (int robotIndex);
 
+    void set_dead(int robotIndex); // set the robot dead
 };
 
 GenericRobot :: GenericRobot(const string& filename) : Map (filename) // constructor
@@ -482,8 +483,10 @@ void GenericRobot::set_initialJump (int robotIndex)
   remainingJump[robotIndex] = 3;
 }
 
-
-
+void GenericRobot::set_dead(int robotIndex) 
+{
+  lives[robotIndex] = 0;
+}
 
 class ShootingRobot : virtual public GenericRobot 
 {
@@ -579,26 +582,26 @@ public:
       int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1};
       int dy[] = {0, 1, 1, 1, 0, -1, -1, -1};
 
-    for ( int i = 0; i < 8 && remainingTracker > 0; i++)
-    {
-      int x = robotPosX[robotIndex] + dx[i];
-      int y = robotPosY[robotIndex] + dy[i];
-
-      if (x >= 0 && x < getRows() && y >= 0 && y < getCols())
+      for ( int i = 0; i < 8 && remainingTracker > 0; i++)
       {
-        char enemy = table[x][y];
+        int x = robotPosX[robotIndex] + dx[i];
+        int y = robotPosY[robotIndex] + dy[i];
 
-        if (enemy >= 'A' && enemy <= 'Z' && enemy != ('A' + robotIndex)) //look for robot other than yourself
+        if (x >= 0 && x < getRows() && y >= 0 && y < getCols())
         {
-          bool enemyTracked = false;
-          for (const auto& tracked : trackedEnemy)
+          char enemy = table[x][y];
+
+          if (enemy >= 'A' && enemy <= 'Z' && enemy != ('A' + robotIndex)) //look for robot other than yourself
           {
-            if (tracked.name == enemy)
+            bool enemyTracked = false;
+            for (const auto& tracked : trackedEnemy)
             {
-              enemyTracked = true;
-              break;
+              if (tracked.name == enemy)
+              {
+                enemyTracked = true;
+                break;
+              }
             }
-          }
 
             if (!enemyTracked)
             {
@@ -719,7 +722,7 @@ class SemiAutoRobot : public LookingRobot, public ShootingRobot
   public: 
   SemiAutoRobot(const string& filename): GenericRobot(filename){} // default constructor
   
-  void look (int robotIndex, bool isUpgraded) override
+  void look (int robotIndex, bool isUpgraded = true) override
   {
 
     if (robotIndex >= size) //check if the robot exist
@@ -755,7 +758,7 @@ class SemiAutoRobot : public LookingRobot, public ShootingRobot
             {
                 
                 int shots = isUpgraded ? 3 : 1; // 3 shots if upgraded(true), 1 otherwise (false)
-                for (int i =0; i <size; i++)
+                for (int i =0; i < shots; i++)
                 {
                   shoot(robotIndex, dx[d], dy[d], target_name, true); // fire at the target robot
                   printOutput("\n");
@@ -792,7 +795,7 @@ class JumpRobot : public MovingRobot
   public:
     JumpRobot(const string& filename): GenericRobot(filename){} // default constructor
 
-    void move(const string& filename, int robotIndex, bool isUpgraded) override 
+    void move(const string& filename, int robotIndex, bool isUpgraded = true) override 
     {
       remainingJump[robotIndex]--;
       if (remainingJump[robotIndex] >= 0)
@@ -925,7 +928,7 @@ public:
       {
         if ((rand() % 2) == 0)
         {
-           SemiAutoRobot::look(robotIndex, true);
+           SemiAutoRobot::look(robotIndex);
         }
         
       }
@@ -1057,31 +1060,34 @@ public:
       }
     }
 
-
-    if (moveUpgradeType[robotIndex] == 1 && !hide[robotIndex]) // hide // only upgrade when its not upgrade to hide 
-    { 
-      upg_hidebot(robotIndex); // upgrade to hide        
-    }
-    else if (moveUpgradeType[robotIndex] == 2) // jump
+    if (isUpgraded)
     {
-      if (remainingJump == 0)
-      {
-        // Jump upgrade used up, fall back to normal move
-          moveUpgradeType[robotIndex] = 0; // Remove jump upgrade
-
-          Robot::move(filename, robotIndex, false);
-          return;
+      if (moveUpgradeType[robotIndex] == 1 && !hide[robotIndex]) // hide // only upgrade when its not upgrade to hide 
+      { 
+        upg_hidebot(robotIndex); // upgrade to hide        
       }
-      else
+      else if (moveUpgradeType[robotIndex] == 2) // jump
       {
-        if ((rand() % 2) == 0)
+        if (remainingJump == 0)
         {
-          JumpRobot :: move(filename, robotIndex, true);
-          return; 
+          // Jump upgrade used up, fall back to normal move
+            moveUpgradeType[robotIndex] = 0; // Remove jump upgrade
+
+            Robot::move(filename, robotIndex, false);
+            return;
         }
-        
+        else
+        {
+          if ((rand() % 2) == 0)
+          {
+            JumpRobot :: move(filename, robotIndex, true);
+            return; 
+          }
+          
+        }
       }
     }
+    
 
     // Remove from current position
     table[robotPosX[robotIndex]][robotPosY[robotIndex]] = '.';
@@ -1200,19 +1206,22 @@ public:
     
     }
       
-    
-    if (lookUpgradeType[robotIndex] == 1)
+    if (isUpgraded)
     {
-      if (rand() % 2 == 0) // 50% to use the skills
-      { 
-        ScoutRobot::look(robotIndex);
+      if (lookUpgradeType[robotIndex] == 1)
+      {
+        if (rand() % 2 == 0) // 50% to use the skills
+        { 
+          ScoutRobot::look(robotIndex);
+        }
+      }
+      else if (lookUpgradeType[robotIndex] == 2)
+      {
+        TrackerRobot :: look(robotIndex);
+        return;
       }
     }
-    else if (lookUpgradeType[robotIndex] == 2)
-    {
-      TrackerRobot :: look(robotIndex);
-      return;
-    }
+    
 
     // Up, Up-Right, Right, Down-Right, Down, Down-Left, Left, Up-Left
     int dx[] = {-1, -1, 0, 1, 1, 1, 0, -1}; 
@@ -1295,8 +1304,6 @@ int main()
     
     for (int robotIndex = 0; robotIndex < numRobots; ++robotIndex) // each robot takes turn
     { 
-      
-      robot.display_robotPos(); // update robot positions on the map
 
       // --- Add this block to check shells after each turn ---
       if (robot.get_shells(robotIndex) <= 0) 
@@ -1304,8 +1311,9 @@ int main()
           printOutput("Robot " + string(1, char('A' + robotIndex)) + " has no shells left.");
           printOutput("Robot " + string(1, char('A' + robotIndex)) + " self-destruct.  \n\n");
         
+          robot.set_dead(robotIndex); // set the robot as dead
           robot.self_destruct(robotIndex);
-          robot.display_robotPos();
+          robot.display_robotPos(); // update robot positions on the map
           continue;
       }
 
@@ -1342,7 +1350,7 @@ int main()
       gameStart = false; // end the game
     }
   }
-
+  robot.display_robotPos(); // update robot positions on the map
   robot.destroy_map(); // deallocate the memory for the robot map
 
   output.close();
